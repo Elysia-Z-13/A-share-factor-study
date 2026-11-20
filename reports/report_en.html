@@ -1,0 +1,741 @@
+<!DOCTYPE html><html lang='en'><head>
+<meta charset='utf-8'>
+<title>Cross-Sectional Predictive Power of A-Share Financial Factors</title>
+<style>
+@page { size: A4; margin: 18mm 16mm 16mm 16mm;
+        @bottom-center { content: counter(page); } }
+* { box-sizing: border-box; }
+body { font-family: "Microsoft YaHei", "Segoe UI", -apple-system, sans-serif;
+       font-size: 10.5pt; line-height: 1.65; color: #1a1a1a; margin: 0; }
+h1 { font-size: 19pt; color: #1f4e79; border-bottom: 2.5px solid #1f4e79;
+     padding-bottom: 6px; margin: 26px 0 14px; page-break-after: avoid; }
+h2 { font-size: 14pt; color: #1f4e79; margin: 20px 0 10px;
+     border-left: 4px solid #1f4e79; padding-left: 9px; page-break-after: avoid; }
+h3 { font-size: 11.5pt; color: #333; margin: 15px 0 8px; page-break-after: avoid; }
+p { margin: 0 0 8px; text-align: justify; }
+strong { color: #0d2f52; }
+pre { background: #f5f7f9; border-left: 3px solid #1f4e79; padding: 10px 14px;
+      font-family: Consolas, "Courier New", monospace; font-size: 8.8pt;
+      line-height: 1.5; overflow-x: auto; white-space: pre-wrap;
+      page-break-inside: avoid; margin: 10px 0; border-radius: 3px; }
+blockquote { border-left: 3px solid #1f4e79; background: #f8fafc;
+             margin: 12px 0; padding: 9px 14px; color: #444; font-style: italic; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0 16px;
+        font-size: 8.8pt; page-break-inside: avoid; }
+th { background: #1f4e79; color: #fff; padding: 6px 7px; text-align: center;
+     font-weight: 600; border: 0.5px solid #1f4e79; }
+td { padding: 5px 7px; border: 0.5px solid #d0d7de; vertical-align: top; }
+tr:nth-child(even) td { background: #f6f8fa; }
+td:not(:first-child) { text-align: center; }
+td:first-child { text-align: left; }
+figure { margin: 14px 0; page-break-inside: avoid; text-align: center; }
+figure img { max-width: 100%; border: 0.5px solid #e0e0e0; border-radius: 3px; }
+figcaption { font-size: 9pt; color: #666; margin-top: 5px; font-style: italic; }
+.cover { text-align: center; padding-top: 110px; page-break-after: always; }
+.cover h1 { border: none; font-size: 30pt; margin-bottom: 12px; }
+.cover .sub { font-size: 13pt; color: #666; margin-bottom: 55px; }
+.cover table { width: 62%; margin: 0 auto; font-size: 10pt; }
+.cover td { border: none; text-align: right; padding: 5px 10px; background: none !important; }
+.cover td:last-child { text-align: left; font-weight: 600; }
+.cover td:first-child { color: #1f4e79; font-weight: 600; }
+.toc { page-break-after: always; }
+.toc div { margin: 3px 0; }
+.toc .l1 { font-weight: 700; color: #1f4e79; font-size: 11pt; margin-top: 7px; }
+.toc .l2 { padding-left: 22px; font-size: 10pt; color: #333; }
+.pb { page-break-after: always; }
+</style></head><body>
+<div class='cover'>
+<h1>Cross-Sectional Predictive Power of A-Share Financial Factors</h1>
+<div class='sub'>A complete test of one factor hypothesis through the MLFT seven-stage pipeline</div>
+<table>
+<tr><td>Period</td><td>2010-01-04 to 2026-11-18</td></tr>
+<tr><td>Sample</td><td>A-share market, 5,970 stocks, 4,097 trading days</td></tr>
+<tr><td>Label</td><td>60-day forward return (next-open-to-open)</td></tr>
+<tr><td>Pipeline</td><td>33 / 41 steps</td></tr>
+<tr><td>Verdict</td><td>REVISE (study further)</td></tr>
+<tr><td>Date</td><td>2026-11-21</td></tr>
+</table></div>
+<h1>Abstract</h1>
+<p>This study tests one specific hypothesis: <strong>can a listed company&#x27;s gross margin level and its quarter-on-quarter change predict the stock&#x27;s return over the next 60 trading days?</strong></p>
+<p>After completing 33 of 41 steps in the MLFT seven-stage pipeline (41 steps / 37 gates), six findings emerge:</p>
+<ul>
+<li><strong>Statistically significant</strong>: the 3-factor equal-weight composite has a Rank IC of +0.0496, HAC t = 3.06, permutation test p = 0.000</li>
+<li><strong>Economically positive but thin</strong>: long-only portfolio annualised net return +5.63% (benchmark +4.36%), <strong>net excess +1.26%</strong></li>
+<li><strong>Cost-safe</strong>: break-even cost 49.5bp, which is <strong>2.36×</strong> the real cost of 20.9bp</li>
+<li><strong>But statistically under-powered</strong>: Deflated Sharpe Ratio <strong>DSR = 0.8153</strong>, below the 0.95 threshold</li>
+<li><strong>And capacity-constrained</strong>: capacity ceiling <strong>RMB 43M</strong>, a RMB 100M AUM exceeds it by 234%</li>
+<li><strong>And decaying</strong>: net excess trends to zero over 2021-2024; 4 of 5 factors were rejected by the mechanism test</li>
+</ul>
+<blockquote>Therefore the strategy cannot be declared valid. The value of this report is not &#x27;finding a profitable strategy&#x27; but demonstrating what a complete, gate-enforced research process — one that is allowed to reach a negative conclusion — should look like.</blockquote>
+<table>
+<colgroup><col style='width:38.0%'><col style='width:39.2%'><col style='width:22.8%'></colgroup>
+<thead><tr><th>Metric</th><th>Value</th><th>Verdict</th></tr></thead><tbody>
+<tr><td>Sample period</td><td>2010-01-04 to 2026-11-18</td><td>—</td></tr>
+<tr><td>Sample size</td><td>5,970 stocks / 4,097 trading days / 14,899,513 rows</td><td>—</td></tr>
+<tr><td>Candidate factors → passed mechanism test</td><td>5 → <strong>1</strong></td><td>⚠️</td></tr>
+<tr><td>Rank IC (3-factor equal weight)</td><td>+0.0496, HAC t = <strong>3.06</strong></td><td>✅ above t&gt;3</td></tr>
+<tr><td>Permutation test</td><td>p = <strong>0.000</strong> (real IC is 8-14× the null p95)</td><td>✅</td></tr>
+<tr><td>Annualised net return / benchmark</td><td>+5.63% / +4.36%</td><td>✅</td></tr>
+<tr><td><strong>Long-only annualised net excess</strong></td><td><strong>+1.26%</strong></td><td>⚠️ thin</td></tr>
+<tr><td><strong>break-even / real cost</strong></td><td><strong>49.5bp / 20.9bp = 2.36×</strong></td><td>✅ above 2×</td></tr>
+<tr><td>Sharpe (excess)</td><td>+0.728, 95% CI [+0.193, +1.262]</td><td>⚠️ wide</td></tr>
+<tr><td><strong>DSR</strong></td><td><strong>0.8153</strong> (threshold 0.95)</td><td>❌ <strong>fail</strong></td></tr>
+<tr><td>Max drawdown / recovery</td><td>−53.7% / 8 periods (~2 years)</td><td>⚠️</td></tr>
+<tr><td>Stress matrix</td><td><strong>5/8 positive</strong></td><td>❌</td></tr>
+<tr><td><strong>Capacity</strong></td><td><strong>RMB 43M</strong> (RMB 100M AUM exceeds by 234%)</td><td>❌</td></tr>
+</tbody></table>
+<p style='text-align:center'><strong>Pipeline progress: 33/41, halted at gate G5.4 (DSR &gt; 0.95) in stage E7</strong></p>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig11_pipeline.png'><figcaption></figcaption></figure>
+<div class='pb'></div>
+<div class='toc'><h1>Contents</h1>
+<div class='l1'>Abstract</div>
+<div class='l1'>1. Research Question and Design</div>
+<div class='l2'>1.1 The decision problem</div>
+<div class='l2'>1.2 Why these design choices</div>
+<div class='l2'>1.3 Why the MLFT pipeline</div>
+<div class='l1'>2. Data Processing: Removing &#x27;the future&#x27; and &#x27;the unbuyable&#x27;</div>
+<div class='l2'>2.1 Data sources</div>
+<div class='l2'>2.2 Decision 1: legal filing deadline as announcement-date proxy</div>
+<div class='l2'>2.3 Decision 2: the IC difference between alignment methods</div>
+<div class='l2'>2.4 Decision 3: excluding non-tradable samples</div>
+<div class='l1'>3. Feature Engineering: a three-filter screen</div>
+<div class='l2'>3.1 Three filters and five candidate factors</div>
+<div class='l2'>3.2 A discovered 4× horizon mismatch</div>
+<div class='l2'>3.3 Four driver categories and role separation</div>
+<div class='l2'>3.4 Control experiment: A-share 60-day is reversal, not momentum</div>
+<div class='l1'>4. Model Construction: why zero-parameter equal weighting</div>
+<div class='l2'>4.1 Complexity is hard-constrained by sample size</div>
+<div class='l2'>4.2 Is non-linearity needed?</div>
+<div class='l2'>4.3 Equal weight or IC weight?</div>
+<div class='l2'>4.4 Is calibration needed?</div>
+<div class='l1'>5. Evaluation: seven progressively harder gates</div>
+<div class='l2'>5.1 E1 Mechanism</div>
+<div class='l2'>5.2 E2 Signal</div>
+<div class='l2'>5.3 E3 Model validity</div>
+<div class='l2'>5.4 E4 Strategy</div>
+<div class='l2'>5.5 E5 Cost</div>
+<div class='l2'>5.6 E6 Turnover and capacity</div>
+<div class='l2'>5.7 E7 Statistical inference</div>
+<div class='l1'>6. Conclusion</div>
+<div class='l1'>7. Limitations and Next Steps</div>
+<div class='l1'>Appendix A — Key numbers</div>
+<div class='l1'>Appendix B — The 15 rejected options</div>
+<div class='l1'>Appendix C — Methodological lesson: metric drift</div>
+</div>
+<h1>1. Research Question and Design</h1>
+<h2>1.1 The decision problem</h2>
+<blockquote>Given an A-share stock, can its most recent gross margin level and its quarter-on-quarter change predict the return over the next 60 trading days?</blockquote>
+<h2>1.2 Why these design choices</h2>
+<table>
+<colgroup><col style='width:20.3%'><col style='width:29.1%'><col style='width:50.6%'></colgroup>
+<thead><tr><th>Design item</th><th>Value</th><th>Rationale</th></tr></thead><tbody>
+<tr><td><strong>Horizon</strong></td><td>60 trading days (~1 quarter)</td><td>Matches reporting frequency; shorter means information is not yet reflected, longer means noise dominates</td></tr>
+<tr><td><strong>Label</strong></td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>open_adj[t+H+1] / open_adj[t+1] − 1</code></td><td><strong>Decide at T close → execute at T+1 open</strong>, avoiding same-bar execution (a tradability look-ahead)</td></tr>
+<tr><td><strong>Return convention</strong></td><td>long-only</td><td><strong>A-shares cannot be shorted</strong> (securities lending is costly and scarce), so short-leg returns are not realisable</td></tr>
+<tr><td><strong>Benchmark</strong></td><td>equal-weight universe (same tradable set)</td><td>Using an index (e.g. CSI 300) would mix &#x27;universe difference&#x27; into the excess — our universe tilts small/mid cap</td></tr>
+<tr><td><strong>Success criterion</strong></td><td>Rank IC 0.02-0.05</td><td>Industry rule of thumb: &gt; 0.10 means check for leakage first; &lt; 0.02 cannot cover costs</td></tr>
+</tbody></table>
+<h2>1.3 Why the MLFT pipeline</h2>
+<p>MLFT is a mandatory-sequence process with 41 steps and 37 gates. Reasons for using it:</p>
+<ul>
+<li><strong>Gates are decidable</strong>, not subjective — failing means rollback, with no room to persuade yourself to &#x27;just tweak it a bit&#x27;</li>
+<li><strong>Every rollback records a root cause</strong> (R1 data missing / R2 point-in-time leakage / R3 spec-contract missing / R4 statistical discipline / R5 insufficient evidence / R6 institutional constraints / R7 process skipping)</li>
+<li><strong>Every trial is logged</strong>, so the final DSR (Deflated Sharpe Ratio) can discount search bias</li>
+</ul>
+<p>This project executed <strong>37 gate evaluations and rolled back 5 times</strong> (RB-001 to RB-005).</p>
+<div class='pb'></div>
+<h1>2. Data Processing: Removing &#x27;the future&#x27; and &#x27;the unbuyable&#x27;</h1>
+<h2>2.1 Data sources</h2>
+<table>
+<colgroup><col style='width:29.1%'><col style='width:41.8%'><col style='width:29.1%'></colgroup>
+<thead><tr><th>Data</th><th>Scale</th><th>Use</th></tr></thead><tbody>
+<tr><td>Daily quotes (CSMAR)</td><td>14,899,513 rows / 5,970 stocks / 4,097 days</td><td>Price, turnover, tradability</td></tr>
+<tr><td>Income statement (FS_Comins)</td><td>319,786 rows / 5,964 stocks / 83 periods</td><td>Gross margin</td></tr>
+<tr><td>Balance sheet (FS_Combas)</td><td>Same</td><td>Fixed assets</td></tr>
+<tr><td>Fixed-asset footnote (FN_Fn020)</td><td>63,474 rows / 17 periods</td><td>Transfer intensity, depreciation rate</td></tr>
+</tbody></table>
+<h2>2.2 Decision 1: legal filing deadline as announcement-date proxy</h2>
+<p><strong>Problem</strong>: CSMAR&#x27;s <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>DeclareDate</code> (actual announcement date) has very low fill rates.</p>
+<table>
+<colgroup><col style='width:58.3%'><col style='width:41.7%'></colgroup>
+<thead><tr><th>Table</th><th>DeclareDate fill rate</th></tr></thead><tbody>
+<tr><td>FS_Comins (income statement)</td><td>5.0%</td></tr>
+<tr><td>FS_Combas (balance sheet)</td><td>7.7%</td></tr>
+<tr><td>FN_Fn020 (fixed-asset footnote)</td><td><strong>column absent</strong></td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:39.2%'><col style='width:60.8%'></colgroup>
+<thead><tr><th>Option</th><th>Consequence</th></tr></thead><tbody>
+<tr><td>Align on <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>Accper</code> (report period)</td><td>❌ <strong>look-ahead</strong> — the period end is far earlier than the announcement</td></tr>
+<tr><td>Keep only rows with <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>DeclareDate</code></td><td>❌ discards 92-95% of the data</td></tr>
+<tr><td><strong>Use the legal filing deadline</strong></td><td>✅ conservative (never early), 100% coverage</td></tr>
+</tbody></table>
+<pre>Annual report (Dec 31)   → Apr 30 of the following year
+Q1 report      (Mar 31)   → Apr 30 of the same year
+Interim report (Jun 30)   → Aug 31 of the same year
+Q3 report      (Sep 30)   → Oct 31 of the same year</pre>
+<p><strong>Cost and benefit</strong>: signal availability is systematically delayed (up to 4 months), in exchange for zero look-ahead violations and 100% coverage.</p>
+<h2>2.3 Decision 2: the IC difference between alignment methods</h2>
+<table>
+<colgroup><col style='width:34.2%'><col style='width:21.5%'><col style='width:44.3%'></colgroup>
+<thead><tr><th>Alignment</th><th>Rank IC</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>Accper</code> (report period)</td><td>0.01382</td><td>❌ look-ahead</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>available_at</code> (announcement / deadline)</td><td>0.00774</td><td>✅ genuinely available</td></tr>
+</tbody></table>
+<p style='text-align:center'><strong>They differ by 1.78× — that is the price of look-ahead bias.</strong></p>
+<h2>2.4 Decision 3: excluding non-tradable samples</h2>
+<table>
+<colgroup><col style='width:31.6%'><col style='width:21.5%'><col style='width:46.8%'></colgroup>
+<thead><tr><th>Excluded</th><th>Rows</th><th>Reason</th></tr></thead><tbody>
+<tr><td>Entry-day (T+1) limit-up</td><td><strong>231,158</strong></td><td>No sellers at the limit price — cannot buy</td></tr>
+<tr><td>T+1 one-word limit-up</td><td><strong>60,225</strong></td><td>Same</td></tr>
+<tr><td>First day after long suspension</td><td><strong>28,864</strong></td><td>Abnormal pricing on resumption</td></tr>
+<tr><td>ST / *ST</td><td>—</td><td>Institutional constraint (5% limit)</td></tr>
+<tr><td>Listed &lt; 250 days</td><td>—</td><td>Price discovery incomplete</td></tr>
+<tr><td>Bottom 20% by turnover</td><td>—</td><td>Insufficient liquidity</td></tr>
+</tbody></table>
+<blockquote>If the backtest &#x27;buys&#x27; a limit-up stock that rises another 5% the next day, it books +5% — but you could never have bought it. That +5% is fake: this is tradability look-ahead.</blockquote>
+<p><strong>These categories account for 20.8% of the raw data.</strong></p>
+<p><strong>Data version</strong>: snapshot <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>snap-1778b81371ea59fa</code> (227 files / 11.32 GB); every intermediate carries a hash so any result is traceable.</p>
+<div class='pb'></div>
+<h1>3. Feature Engineering: a three-filter screen</h1>
+<h2>3.1 Three filters and five candidate factors</h2>
+<table>
+<colgroup><col style='width:16.5%'><col style='width:40.5%'><col style='width:43.0%'></colgroup>
+<thead><tr><th>Filter</th><th>Question</th><th>Consequence of failing</th></tr></thead><tbody>
+<tr><td><strong>① Horizon alignment</strong></td><td>Does the lookback window match the label horizon?</td><td>Mismatch dilutes IC and can create spurious signals</td></tr>
+<tr><td><strong>② Mechanism attribution</strong></td><td>Which of the four driver categories does it belong to?</td><td>A factor without a driver does not enter the model</td></tr>
+<tr><td><strong>③ Role separation</strong></td><td>Is it signal / state / control?</td><td>Treating state as signal causes turnover explosion</td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:22.1%'><col style='width:29.9%'><col style='width:18.2%'><col style='width:13.0%'><col style='width:16.9%'></colgroup>
+<thead><tr><th>Factor</th><th>Definition</th><th>Source</th><th>Coverage</th><th>Actual frequency</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></td><td>Gross margin = (revenue − COGS)/revenue</td><td>Income stmt</td><td>98.0%</td><td><strong>quarterly</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td>Quarter-on-quarter change in gross margin</td><td>Income stmt</td><td>96.2%</td><td><strong>quarterly</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code></td><td>4-period rolling std of gross margin</td><td>Income stmt</td><td>94.4%</td><td><strong>quarterly</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code></td><td>CIP transferred / opening gross fixed assets</td><td><strong>footnote</strong></td><td><strong>19.8%</strong></td><td><strong>annual</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></td><td>Period depreciation add / opening gross fixed assets</td><td><strong>footnote</strong></td><td><strong>19.8%</strong></td><td><strong>annual</strong></td></tr>
+</tbody></table>
+<h2>3.2 A discovered 4× horizon mismatch</h2>
+<p><strong>Initial annotation</strong>: lookback for <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code> / <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code> = &#x27;most recent period&#x27; ≈ 60 trading days → equal-length match ✅</p>
+<p><strong>After checking the actual reporting-month distribution</strong>:</p>
+<pre>Actual distribution = {June: 3,929 rows, December: 59,547 rows, March / September: 0 rows}
+→ Fixed-asset footnotes are disclosed only in interim and annual reports
+→ Effectively &#x27;one period per year&#x27;; information freshness up to 12 months ≈ 250 trading days
+→ Relative to H = 60 this is a 4× mismatch</pre>
+<p><strong>The error was only fully confirmed at E1</strong> — mismatched factors leave a fingerprint on the timing placebo: <strong>the 3-year lag is stronger than the contemporaneous one.</strong></p>
+<h2>3.3 Four driver categories and role separation</h2>
+<table>
+<colgroup><col style='width:21.5%'><col style='width:15.2%'><col style='width:63.3%'></colgroup>
+<thead><tr><th>Factor</th><th>Driver</th><th>Mechanism narrative</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></td><td><strong>Risk premium</strong></td><td>Quality premium: high margin = pricing power = competitive moat; the market demands compensation for quality</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td><strong>Persistence</strong></td><td>Margin improvement persists (fundamental momentum); the market under-reacts to marginal improvement</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code></td><td>Persistence</td><td>CIP → fixed assets → capacity → revenue growth is a persistent process</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></td><td>Persistence</td><td>Asset ageing → persistent capex pressure</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code></td><td><strong>Risk premium</strong></td><td>Low-volatility anomaly: lottery-preferring investors underprice stable stocks</td></tr>
+</tbody></table>
+<p><strong>Distribution weakness (disclosed)</strong>: 2 risk-premium, 3 persistence, <strong>0 mean-reversion, 0 predictable-clock</strong> — the factor set is homogeneous.</p>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig13_correlation.png' style='width:77%'><figcaption></figcaption></figure>
+<p><strong>PCA variance explained</strong> (3 factors, full-market group): 39.4% / 32.7% / 27.9% — nearly equal, indicating near-orthogonality.</p>
+<h2>3.4 Control experiment: A-share 60-day is reversal, not momentum</h2>
+<table>
+<colgroup><col style='width:40.5%'><col style='width:21.5%'><col style='width:38.0%'></colgroup>
+<thead><tr><th>Control factor</th><th>IC</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>mom_60</code> (60-day momentum)</td><td><strong>−0.1027</strong></td><td><strong>A-share 60-day is reversal, not momentum</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>rev_5_ma60</code> (5-day reversal vs 60-day MA)</td><td>−0.0685</td><td>Also negative</td></tr>
+</tbody></table>
+<p><strong>This corrects a common intuition error</strong>: assuming positive momentum would have applied the sign backwards.</p>
+<div class='pb'></div>
+<h1>4. Model Construction: why zero-parameter equal weighting</h1>
+<h2>4.1 Complexity is hard-constrained by sample size</h2>
+<pre>Parameter-to-sample ratio   p / n &lt; 1/50    i.e.   n &gt; 50 × p
+
+n = number of independent observations (NOT row count)
+p = number of model parameters
+
+Our n: independent reporting periods = 64   (NOT 179,750 rows)
+     → p must be &lt; 1.28</pre>
+<table>
+<colgroup><col style='width:34.2%'><col style='width:16.5%'><col style='width:19.0%'><col style='width:17.7%'><col style='width:12.7%'></colgroup>
+<thead><tr><th>Model</th><th>Params p</th><th>Needs n &gt;</th><th>Ours n=64</th><th>Verdict</th></tr></thead><tbody>
+<tr><td><strong>Equal weight / ranking</strong></td><td><strong>0</strong></td><td>—</td><td>—</td><td>✅</td></tr>
+<tr><td>Ridge / LASSO</td><td>3</td><td>150</td><td>❌ short by 2.3×</td><td>❌</td></tr>
+<tr><td>Single tree (d=3)</td><td>~8</td><td>400</td><td>❌</td><td>❌</td></tr>
+<tr><td>GBDT (100 trees, d=3)</td><td>~800</td><td>40,000</td><td>❌ short by 625×</td><td>❌</td></tr>
+<tr><td>Random forest (200 trees, d=5)</td><td>~6,400</td><td>320,000</td><td>❌</td><td>❌</td></tr>
+<tr><td>Transformer (1 layer, d=64)</td><td>~5,000</td><td>250,000</td><td>❌ short by 3,900×</td><td>❌</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig7_complexity.png'><figcaption></figcaption></figure>
+<h2>4.2 Is non-linearity needed?</h2>
+<table>
+<colgroup><col style='width:25.3%'><col style='width:40.5%'><col style='width:34.2%'></colgroup>
+<thead><tr><th>Evidence</th><th>How to check</th><th>Result</th></tr></thead><tbody>
+<tr><td>Quantile monotonicity</td><td>Split into 10 buckets, check monotonicity</td><td>78% same-sign (not strictly monotone)</td></tr>
+<tr><td>Residual structure</td><td>Bucket residuals after linear fit</td><td>Slight structure in manufacturing group</td></tr>
+<tr><td>Interaction significance</td><td>Two-way stratification</td><td>2 factors show interaction</td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:42.9%'><col style='width:28.6%'><col style='width:28.6%'></colgroup>
+<thead><tr><th>Model</th><th>Full-market IC</th><th>Manufacturing IC</th></tr></thead><tbody>
+<tr><td><strong>Equal weight (p=0)</strong></td><td><strong>+0.0496</strong></td><td>+0.0215</td></tr>
+<tr><td>LASSO</td><td>+0.0217</td><td>+0.0380</td></tr>
+<tr><td>Ridge</td><td>+0.0300</td><td><strong>+0.0556</strong></td></tr>
+<tr><td>GBDT</td><td>+0.0264</td><td>+0.0494</td></tr>
+<tr><td>GBDT (early stopping)</td><td>—</td><td>+0.0540</td></tr>
+<tr><td>Random forest</td><td>+0.0194</td><td>+0.0471</td></tr>
+</tbody></table>
+<pre>Non-linearity increment (GBDT − Ridge):
+  Full-market:  +0.0264 − 0.0300 = -0.0036   (negative!)
+  Manufacturing:+0.0494 − 0.0556 = -0.0062   (negative!)
+
+The hard threshold requires ΔIC &gt; 0.003
+→ Non-linearity not only fails the threshold, it is negative
+→ Verdict: do not use non-linearity</pre>
+<h2>4.3 Equal weight or IC weight?</h2>
+<table>
+<colgroup><col style='width:32.5%'><col style='width:23.4%'><col style='width:23.4%'><col style='width:20.8%'></colgroup>
+<thead><tr><th>Group</th><th>Equal-weight IC</th><th>IC-weighted IC</th><th>Difference</th></tr></thead><tbody>
+<tr><td>Full-market</td><td><strong>+0.0496</strong></td><td>+0.0495</td><td>+0.0001</td></tr>
+<tr><td>Manufacturing</td><td>+0.0592</td><td><strong>+0.0622</strong></td><td>−0.0030</td></tr>
+</tbody></table>
+<pre>Full-market: difference is negligible → equal weight wins on p = 0
+
+Manufacturing: IC weighting is higher by 0.003
+  but there are only 17 independent periods
+  → weight estimation standard error ≈ 1/√17 = 0.258
+  → estimation error (0.258) far exceeds the gain (0.003)
+  → net judgement: equal weight is more stable</pre>
+<p><strong>We adopt equal weight</strong>, and record a counter-example: if independent periods ever exceed 50, the weight estimation error drops to 1/√50 ≈ 0.14, at which point IC weighting may become worthwhile.</p>
+<h2>4.4 Is calibration needed?</h2>
+<table>
+<colgroup><col style='width:61.5%'><col style='width:38.5%'></colgroup>
+<thead><tr><th>How the downstream uses it</th><th>Calibration needed?</th></tr></thead><tbody>
+<tr><td><strong>Rank-only, pick top-k</strong></td><td>❌ <strong>not needed</strong></td></tr>
+<tr><td>Probability threshold for entry</td><td>✅ required</td></tr>
+<tr><td>Position sizing by probability</td><td>✅ required</td></tr>
+<tr><td>Using the score as expected return</td><td>❌ prohibited</td></tr>
+</tbody></table>
+<pre>IC = Spearman(s, y) = Pearson(rank(s), rank(y))
+For any monotonically increasing g:  rank(g(s)) = rank(s)
+→ IC(g(s), y) = IC(s, y)
+→ identical top-k set → identical weights → identical turnover
+→ nothing changes</pre>
+<table>
+<colgroup><col style='width:33.8%'><col style='width:29.7%'><col style='width:36.5%'></colgroup>
+<thead><tr><th>Group</th><th>Marginal coverage</th><th>Interval width (full range 1.00)</th></tr></thead><tbody>
+<tr><td>Full-market</td><td>89.9% ✅</td><td>0.89</td></tr>
+<tr><td>Manufacturing</td><td>89.6% ✅</td><td>0.89</td></tr>
+</tbody></table>
+<blockquote>Coverage adequacy ≠ model usefulness. Against an unconditional interval (no factor, simply [0.05, 0.95]): width 0.90, coverage 90%. Ours is 0.89 — only 1% narrower, i.e. essentially nothing was learned. Equivalently R² ≈ IC² ≈ 0.0016, explaining 0.16% of variance.</blockquote>
+<table>
+<colgroup><col style='width:30.1%'><col style='width:24.7%'><col style='width:24.7%'><col style='width:20.5%'></colgroup>
+<thead><tr><th>Group</th><th>Brier (raw)</th><th><strong>Constant baseline</strong></th><th>ECE</th></tr></thead><tbody>
+<tr><td>Full-market</td><td>0.2757</td><td><strong>0.2386</strong></td><td>0.16</td></tr>
+<tr><td>Manufacturing</td><td>0.2648</td><td><strong>0.2155</strong></td><td>0.19</td></tr>
+</tbody></table>
+<p><strong>The model&#x27;s probabilities are worse than guessing</strong> (higher Brier is worse).</p>
+<div class='pb'></div>
+<h1>5. Evaluation: seven progressively harder gates</h1>
+<h2>5.1 E1 Mechanism: only 1 of 5 factors passed</h2>
+<table>
+<colgroup><col style='width:20.3%'><col style='width:27.8%'><col style='width:25.3%'><col style='width:26.6%'></colgroup>
+<thead><tr><th>Check</th><th>Method</th><th>Expected</th><th>Failure signal</th></tr></thead><tbody>
+<tr><td><strong>timing placebo</strong></td><td>Lag the factor by 1/2/3/4 periods</td><td>Lag 0 strongest, monotone decay</td><td>Far lags stronger → slow-moving state proxy</td></tr>
+<tr><td><strong>shared-driver</strong></td><td>Shuffle forward returns within period as pseudo-label</td><td>IC ≈ 0</td><td>Still significant → common driver</td></tr>
+<tr><td><strong>regime split</strong></td><td>Recompute IC per market regime</td><td>Sign stable</td><td>Sign flips in one regime and is significant</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig6_mechanism_matrix.png'><figcaption></figcaption></figure>
+<p><strong>The most valuable finding — a complete causal chain.</strong> <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code> timing placebo:</p>
+<pre>k0 (contemporaneous)  +0.0449
+k1                    +0.0227
+k2                    +0.0366
+k3                    +0.0535   ← stronger than contemporaneous
+k4                    +0.0525
+
+The manual&#x27;s failure signal, verbatim:
+  far lags remain flat or even rise → it is a proxy for a slow-moving state variable</pre>
+<p><strong>Interpretation</strong>: a 3-year-old annual report outperforms the latest one → it is not &#x27;information&#x27;, it is a proxy for the &#x27;manufacturing capex cycle&#x27;. Such a variable cannot be used for timing — you do not know when it will change.</p>
+<pre>gm_vol timing placebo:
+k0 -0.0310  k1 -0.0302  k2 -0.0296  k3 -0.0310  k4 -0.0258
+→ essentially flat
+→ it describes the firm&#x27;s long-run volatility profile, not fresh events
+→ it is a STATE variable, not a SIGNAL</pre>
+<p style='text-align:center'><strong>Both findings align perfectly with the 4× horizon mismatch. And <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code> — the only correctly aligned factor — is also the only one passing all four falsification tests.</strong></p>
+<table>
+<colgroup><col style='width:19.0%'><col style='width:26.6%'><col style='width:20.3%'><col style='width:34.2%'></colgroup>
+<thead><tr><th>Role</th><th>Definition</th><th>Control?</th><th>Consequence of error</th></tr></thead><tbody>
+<tr><td><strong>confounder</strong></td><td>Affects both factor and label</td><td>✅ yes</td><td>Not controlling → confounding read as alpha</td></tr>
+<tr><td><strong>mediator</strong></td><td>Factor → mediator → label</td><td>❌ no</td><td>Controlling → cuts the real channel</td></tr>
+<tr><td><strong>collider</strong></td><td>Factor and label <strong>both affect it</strong></td><td>❌ <strong>never</strong></td><td><strong>Controlling → creates spurious correlation</strong></td></tr>
+</tbody></table>
+<p><strong>Disclosed gap</strong>: the DAG says industry is a confounder and should be controlled, but CSMAR industry classification covers only 3.4% and is a snapshot, not a historical panel. Only a crude two-group proxy (manufacturing vs not) was possible — both groups positive (+0.0259 / +0.0347), so the factor is not purely an industry-allocation effect, but a difference does exist.</p>
+<h2>5.2 E2 Signal: IC conventions and the long-only reality</h2>
+<table>
+<colgroup><col style='width:21.5%'><col style='width:38.0%'><col style='width:40.5%'></colgroup>
+<thead><tr><th>Item</th><th>Rule</th><th>Reason</th></tr></thead><tbody>
+<tr><td><strong>Unit of computation</strong></td><td>One rank IC per cross-section, then average over periods</td><td>Pooling stock-days inflates significance</td></tr>
+<tr><td><strong>Significance</strong></td><td>t-statistic uses <strong>HAC</strong> (lag ≥ label horizon)</td><td>IC series is autocorrelated</td></tr>
+<tr><td><strong>Sample size n</strong></td><td><strong>Number of effective periods (70)</strong>, not stock-days (184,456)</td><td>Using row count blows t up to ~430</td></tr>
+<tr><td><strong>Reporting</strong></td><td>mean, ICIR, HAC t, positive ratio, by year</td><td>A single mean carries no information</td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:25.3%'><col style='width:15.2%'><col style='width:13.9%'><col style='width:15.2%'><col style='width:16.5%'><col style='width:13.9%'></colgroup>
+<thead><tr><th>Factor</th><th>IC</th><th>ICIR</th><th>t_naive</th><th><strong>t_hac</strong></th><th>SE inflation</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td>+0.0279</td><td>+0.708</td><td>5.92</td><td><strong>+4.19</strong></td><td>1.41×</td></tr>
+<tr><td>3-factor composite</td><td>+0.0496</td><td>+0.566</td><td>—</td><td><strong>+3.06</strong></td><td>1.63×</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code></td><td>−0.0311</td><td>−0.609</td><td>−5.09</td><td>−3.84</td><td>1.33×</td></tr>
+<tr><td><strong><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></strong></td><td>+0.0257</td><td>+0.226</td><td>1.91</td><td><strong>+1.03</strong></td><td><strong>1.85×</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></td><td>+0.0346</td><td>+0.482</td><td>1.87</td><td>+2.55</td><td>0.73×</td></tr>
+</tbody></table>
+<p style='text-align:center'><strong>The HAC correction changed two conclusions: <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code> fell from 1.91 to 1.03 (insignificant); the 3-factor composite fell from 5.03 to 3.06 (barely above threshold).</strong></p>
+<h3>The step&#x27;s most important finding: excess is almost entirely on the short side</h3>
+<table>
+<colgroup><col style='width:27.8%'><col style='width:19.0%'><col style='width:20.3%'><col style='width:16.5%'><col style='width:16.5%'></colgroup>
+<thead><tr><th>Factor</th><th>Long-short spread</th><th><strong>Long excess</strong></th><th>Short share</th><th>long-only</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td>+1.421%</td><td><strong>+0.136%</strong></td><td><strong>90%</strong></td><td>❌</td></tr>
+<tr><td>3-factor composite</td><td>+2.783%</td><td><strong>+0.777%</strong></td><td>72%</td><td>⚠️ marginal</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></td><td>+2.334%</td><td>+0.673%</td><td>71%</td><td>⚠️ liquidity fails</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code></td><td>—</td><td><strong>−0.102%</strong></td><td>&gt;100%</td><td>❌</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></td><td>+1.216%</td><td><strong>−0.058%</strong></td><td>105%</td><td>❌</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig10_long_short_split.png'><figcaption></figcaption></figure>
+<pre>The arithmetic for dgm_q:
+  Long-short spread +1.421% looks healthy
+  but long excess is only +0.136%; short contributes +1.284% (90%)
+  → A-shares cannot be shorted → that 1.284% is not realisable
+  → annualised = 0.136% × (252/60) = 0.57%
+  → annualised cost 0.84% (then estimate) → net excess is NEGATIVE</pre>
+<p><strong>Our strongest factor (<code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code>, t_hac 4.19) loses money under long-only.</strong></p>
+<table>
+<colgroup><col style='width:27.8%'><col style='width:17.7%'><col style='width:15.2%'><col style='width:19.0%'><col style='width:20.3%'></colgroup>
+<thead><tr><th>Factor</th><th>Low turnover</th><th>Mid</th><th><strong>High turnover</strong></th><th>Verdict</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td>+0.0238</td><td>+0.0315</td><td><strong>+0.0329</strong></td><td>✅ stronger in liquid names</td></tr>
+<tr><td>3-factor composite</td><td>+0.0438</td><td>+0.0530</td><td><strong>+0.0650</strong></td><td>✅</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code></td><td>+0.0285</td><td>+0.0436</td><td><strong>+0.0734</strong></td><td>✅</td></tr>
+<tr><td><strong><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></strong></td><td><strong>+0.0581</strong></td><td>+0.0277</td><td>+0.0313</td><td>❌ <strong>only in the least liquid bucket</strong></td></tr>
+</tbody></table>
+<p><strong>A counter-intuitive finding that later became the improvement direction</strong>: <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code> is <strong>stronger in the high-turnover bucket</strong> (0.0329 vs 0.0238), opposite to the &#x27;small caps have more alpha&#x27; intuition. Dropping small caps could therefore be a win-win — <strong>9× the capacity with no alpha loss</strong>.</p>
+<h2>5.3 E3 Model validity</h2>
+<table>
+<colgroup><col style='width:16.2%'><col style='width:43.8%'><col style='width:21.2%'><col style='width:18.8%'></colgroup>
+<thead><tr><th>Layer</th><th>Object</th><th>IC</th><th>t_hac</th></tr></thead><tbody>
+<tr><td>L1</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code> alone</td><td>−0.0311</td><td>−3.87</td></tr>
+<tr><td>L1</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code> alone</td><td>+0.0279</td><td>+4.22</td></tr>
+<tr><td>L1</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code> alone</td><td>+0.0257</td><td>+1.03</td></tr>
+<tr><td>L2</td><td>Ridge</td><td>+0.0300</td><td>+3.40</td></tr>
+<tr><td>L3</td><td>GBDT</td><td>+0.0264</td><td>+3.94</td></tr>
+<tr><td><strong>L1.5</strong></td><td><strong>3-factor equal weight (our model)</strong></td><td><strong>+0.0496</strong></td><td><strong>+3.06</strong></td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:31.5%'><col style='width:15.7%'><col style='width:13.5%'><col style='width:25.8%'><col style='width:13.5%'></colgroup>
+<thead><tr><th>Baseline</th><th>Paired difference</th><th>t_hac</th><th>95% CI</th><th>Excludes zero?</th></tr></thead><tbody>
+<tr><td><strong><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></strong> (E1 PROCEED)</td><td>+0.0233</td><td><strong>+2.20</strong></td><td>[+0.0024, +0.0410]</td><td><strong>✅</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code> (E1 STOP, sign-adjusted)</td><td>+0.0185</td><td>+0.84</td><td>[−0.0245, +0.0615]</td><td>❌</td></tr>
+</tbody></table>
+<pre>A direction adjustment that MUST be made:
+❌ Using raw gm_vol (IC = -0.0311) as the baseline
+   → paired difference is inflated to 0.0823 (one side all-negative, one all-positive)
+✅ Using -gm_vol (IC = +0.0311) as the baseline
+   → paired difference 0.0185 (corresponding to the real &#x27;hold low gm_vol&#x27; strategy)
+
+Without this adjustment you compute a false &quot;paired t = 6.16, highly significant&quot;.</pre>
+<table>
+<colgroup><col style='width:34.1%'><col style='width:18.3%'><col style='width:17.1%'><col style='width:30.5%'></colgroup>
+<thead><tr><th>Factor set</th><th>IC</th><th>t_hac</th><th>Change</th></tr></thead><tbody>
+<tr><td>All 3 factors</td><td>+0.0496</td><td>3.06</td><td>—</td></tr>
+<tr><td><strong>Drop <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code></strong></td><td><strong>+0.0391</strong></td><td><strong>1.68</strong></td><td><strong>becomes insignificant</strong></td></tr>
+<tr><td><strong>Drop <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></strong></td><td>+0.0417</td><td><strong>7.89</strong></td><td><strong>t surges</strong></td></tr>
+<tr><td>Only <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td>+0.0279</td><td>4.22</td><td>—</td></tr>
+</tbody></table>
+<pre>Three findings:
+① Drop gm_vol → t_hac falls from 3.06 to 1.68 (insignificant)
+   → the composite&#x27;s significance depends on gm_vol
+   → but E1 judged gm_vol a slow-moving state variable, not a signal
+   → the composite&#x27;s core contributor is mechanistically invalid (the E1-vs-E3 tension)
+
+② Drop gm → IC falls but t rises from 3.06 to 7.89
+   → gm raises the point estimate but sharply increases variance
+   → from a robustness standpoint it should be dropped
+
+③ The most stable configuration is 2 factors (gm_vol + dgm_q), not 3</pre>
+<h2>5.4 E4 Strategy evaluation</h2>
+<table>
+<colgroup><col style='width:30.4%'><col style='width:69.6%'></colgroup>
+<thead><tr><th>Item</th><th>Convention</th></tr></thead><tbody>
+<tr><td>Signal time</td><td>T close</td></tr>
+<tr><td><strong>Execution time and price</strong></td><td><strong>T+1 open (<code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>open_adj[t+1]</code>)</strong></td></tr>
+<tr><td><strong>Non-tradable</strong></td><td><strong>Limit-up cannot buy / limit-down cannot sell / suspended no trade</strong></td></tr>
+<tr><td>Exclusions</td><td>ST / recently listed / bottom 20% liquidity</td></tr>
+<tr><td><strong>Cost deduction</strong></td><td><strong>deducted at execution time, participating in compounding</strong></td></tr>
+<tr><td><strong>Short side</strong></td><td><strong>none</strong></td></tr>
+<tr><td><strong>Benchmark</strong></td><td><strong>equal-weight universe (self-computed, not an index)</strong></td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:38.2%'><col style='width:61.8%'></colgroup>
+<thead><tr><th>Symptom</th><th>Our handling</th></tr></thead><tbody>
+<tr><td><strong>Same-bar execution</strong></td><td>T-day signal → returns measured from <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>open_adj[t+1]</code></td></tr>
+<tr><td>Implicit fills on missing bars</td><td>Only rows with a label (both T+1 and T+H+1 have quotes)</td></tr>
+<tr><td>Forward-fill creating tradability</td><td><strong>no price filling at all</strong></td></tr>
+<tr><td>Weights ignoring cash</td><td>Equal-weight top-k, weights sum to 1, no leverage</td></tr>
+<tr><td>Cost ignoring financing</td><td>No financing</td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:44.4%'><col style='width:27.8%'><col style='width:27.8%'></colgroup>
+<thead><tr><th>Metric</th><th>2 factors (main)</th><th>3 factors (control)</th></tr></thead><tbody>
+<tr><td>Annualised gross</td><td>+6.56%</td><td>+7.46%</td></tr>
+<tr><td>Annualised net</td><td><strong>+6.12%</strong></td><td><strong>+7.04%</strong></td></tr>
+<tr><td>Benchmark</td><td>+4.36%</td><td>+4.36%</td></tr>
+<tr><td><strong>Net excess</strong></td><td><strong>+1.75%</strong></td><td><strong>+2.68%</strong></td></tr>
+<tr><td><strong>Sharpe (excess)</strong></td><td><strong>+1.01</strong></td><td>+0.65</td></tr>
+<tr><td>MDD</td><td>−52.4%</td><td>−50.8%</td></tr>
+<tr><td>Win rate (excess &gt; 0)</td><td>68%</td><td>63%</td></tr>
+<tr><td>Turnover (annual)</td><td>2.10×</td><td>1.98×</td></tr>
+<tr><td>Holdings</td><td>723 (top-30%)</td><td>723</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig3_nav.png'><figcaption></figcaption></figure>
+<table>
+<colgroup><col style='width:14.7%'><col style='width:17.6%'><col style='width:17.6%'><col style='width:14.7%'><col style='width:17.6%'><col style='width:17.6%'></colgroup>
+<thead><tr><th>Year</th><th>2 factors</th><th>3 factors</th><th>Year</th><th>2 factors</th><th>3 factors</th></tr></thead><tbody>
+<tr><td>2011</td><td>+0.3%</td><td>+1.5%</td><td>2018</td><td>+0.8%</td><td>+0.7%</td></tr>
+<tr><td>2012</td><td>−0.5%</td><td>+1.4%</td><td>2019</td><td>+0.9%</td><td>+1.8%</td></tr>
+<tr><td>2013</td><td>−0.4%</td><td>+3.0%</td><td><strong>2020</strong></td><td><strong>+2.3%</strong></td><td><strong>+3.5%</strong></td></tr>
+<tr><td>2014</td><td>+0.0%</td><td>−1.5%</td><td>2021</td><td>+0.2%</td><td>−0.3%</td></tr>
+<tr><td>2015</td><td>+0.1%</td><td>+1.2%</td><td>2022</td><td>−0.1%</td><td>−2.1%</td></tr>
+<tr><td>2016</td><td>+0.7%</td><td>+0.0%</td><td>2023</td><td>+0.1%</td><td>−1.2%</td></tr>
+<tr><td>2017</td><td>+1.2%</td><td>+1.2%</td><td>2024</td><td>−0.0%</td><td>−0.6%</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig1_ic_decay.png'><figcaption></figcaption></figure>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig14_drawdown.png'><figcaption></figcaption></figure>
+<h2>5.5 E5 Cost evaluation: E4 understated by 2.1×</h2>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig8_cost_breakdown.png'><figcaption></figcaption></figure>
+<table>
+<colgroup><col style='width:17.8%'><col style='width:50.7%'><col style='width:31.5%'></colgroup>
+<thead><tr><th>Layer</th><th>Content</th><th>Our value</th></tr></thead><tbody>
+<tr><td><strong>Explicit</strong></td><td>Commission 2.5bp (both ways) + <strong>stamp duty 10bp (sell only)</strong> + transfer fee 0.1bp</td><td>Buy 2.6 / Sell 12.6 / <strong>round trip 15.2bp</strong></td></tr>
+<tr><td><strong>Implicit</strong></td><td>Spread + slippage</td><td>Upper bound by size bucket</td></tr>
+<tr><td><strong>Capacity</strong></td><td>Participation cap, crowding</td><td>See 5.6</td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:50.0%'><col style='width:50.0%'></colgroup>
+<thead><tr><th>Participation <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>order ÷ ADDV</code></th><th>Model</th></tr></thead><tbody>
+<tr><td><strong>&lt; 0.5%</strong></td><td>Spread model (cost = ½ spread)</td></tr>
+<tr><td>0.5%–2%</td><td>Linear slippage</td></tr>
+<tr><td>&gt; 2%</td><td>Square-root impact</td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:18.9%'><col style='width:21.6%'><col style='width:17.6%'><col style='width:21.6%'><col style='width:20.3%'></colgroup>
+<thead><tr><th>Bucket</th><th>Assumed ADDV</th><th>Participation</th><th>Model</th><th>One-way cost</th></tr></thead><tbody>
+<tr><td>Large</td><td>RMB 500M</td><td>0.01%</td><td>Spread</td><td>12.6bp</td></tr>
+<tr><td>Mid</td><td>RMB 200M</td><td>0.04%</td><td>Spread</td><td>17.6bp</td></tr>
+<tr><td>Small</td><td>RMB 30M</td><td>0.24%</td><td>Spread</td><td>32.6bp</td></tr>
+<tr><td><strong>Weighted</strong></td><td></td><td></td><td></td><td><strong>20.9bp</strong></td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:32.9%'><col style='width:21.5%'><col style='width:21.5%'><col style='width:24.1%'></colgroup>
+<thead><tr><th>Item</th><th>E4</th><th>E5</th><th>Difference</th></tr></thead><tbody>
+<tr><td>One-way cost</td><td>10bp</td><td><strong>20.9bp</strong></td><td><strong>+10.9bp (2.1×)</strong></td></tr>
+<tr><td>2-factor net excess</td><td>+1.75%</td><td><strong>+1.26%</strong></td><td>−0.49pp</td></tr>
+<tr><td>3-factor net excess</td><td>+2.68%</td><td>+2.22%</td><td>−0.46pp</td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:19.8%'><col style='width:19.8%'><col style='width:19.8%'><col style='width:16.0%'><col style='width:24.7%'></colgroup>
+<thead><tr><th>Group</th><th>break-even</th><th>Real cost</th><th><strong>Multiple</strong></th><th>Manual 3× reading</th></tr></thead><tbody>
+<tr><td>2 factors</td><td>49.5bp</td><td>20.9bp</td><td><strong>2.36×</strong></td><td>marginal (passes 2× gate)</td></tr>
+<tr><td>3 factors</td><td>73.8bp</td><td>20.9bp</td><td><strong>3.52×</strong></td><td>robust</td></tr>
+</tbody></table>
+<h2>5.6 E6 Turnover and capacity: the first failure</h2>
+<table>
+<colgroup><col style='width:58.3%'><col style='width:41.7%'></colgroup>
+<thead><tr><th>Item</th><th>2 factors</th></tr></thead><tbody>
+<tr><td>Period turnover / <strong>annual turnover</strong></td><td>52.6% / <strong>2.10×</strong></td></tr>
+<tr><td>Average holding period</td><td>120 trading days</td></tr>
+<tr><td>Max sustainable (aggressive)</td><td>5.25× → margin 2.50×</td></tr>
+<tr><td>Max sustainable (conservative)</td><td>3.05× → margin <strong>1.45×</strong></td></tr>
+<tr><td>Min required edge / actual</td><td>0.35 / <strong>0.87 bp/day</strong> (2.50×)</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig9_capacity.png'><figcaption></figcaption></figure>
+<blockquote>The manual&#x27;s A-share convention is fully confirmed: &#x27;small-cap long-side spreads are often 100-500bp; capacity typically binds before cost does.&#x27; Cost side: break-even 2.36× — passes. Capacity side: 234% — fails.</blockquote>
+<p><strong>alpha-to-go</strong>: signal half-life ≈ 63 trading days (one quarter), build time 5 days → ratio 7.9%, <strong>alpha retained 96%</strong>. This is the core advantage of low-frequency factors.</p>
+<h2>5.7 E7 Statistical inference: the gate stops here</h2>
+<pre>SE(SR) ≈ √((1 + ½·SR²) ÷ T)      T = years, NOT periods</pre>
+<table>
+<colgroup><col style='width:37.0%'><col style='width:31.5%'><col style='width:31.5%'></colgroup>
+<thead><tr><th>Item</th><th>2 factors</th><th>3 factors</th></tr></thead><tbody>
+<tr><td>Excess Sharpe</td><td>+0.728</td><td>+0.536</td></tr>
+<tr><td>T (years)</td><td>17</td><td>17</td></tr>
+<tr><td>SE</td><td>0.273</td><td>0.259</td></tr>
+<tr><td><strong>95% CI</strong></td><td>[+0.193, +1.262]</td><td><strong>[+0.028, +1.045]</strong></td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig12_sharpe_ci.png'><figcaption></figcaption></figure>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig4_dsr.png'><figcaption></figcaption></figure>
+<table>
+<colgroup><col style='width:20.5%'><col style='width:17.9%'><col style='width:19.2%'><col style='width:21.8%'><col style='width:20.5%'></colgroup>
+<thead><tr><th>Group</th><th>Convention</th><th>Sharpe</th><th>E[max\|N=15]</th><th><strong>DSR</strong></th></tr></thead><tbody>
+<tr><td>2 factors</td><td>absolute</td><td>+0.385</td><td>0.445</td><td>0.4054</td></tr>
+<tr><td><strong>2 factors</strong></td><td><strong>excess</strong></td><td><strong>+0.728</strong></td><td>0.483</td><td><strong>0.8153</strong></td></tr>
+<tr><td>3 factors</td><td>excess</td><td>+0.536</td><td>0.459</td><td>0.6169</td></tr>
+</tbody></table>
+<pre>DSR threshold = SE × √(2 ln N) = 0.273 × 1.893 = 0.483
+Our SR = 0.728
+To reach DSR 0.95 we need SR &gt; 0.483 + 1.645 × 0.273 = 0.932
+
+Short by 28%
+
+Three escape routes:
+① Lift SR from 0.73 to 0.93  → needs a new alpha source, not tuning
+② Extend T from 17 to 28 years → data only runs to 2026, impossible
+③ Cut N from 15 to 3           → dishonest, 15 trials really happened
+
+There is no fourth route.</pre>
+<table>
+<colgroup><col style='width:20.0%'><col style='width:18.8%'><col style='width:20.0%'><col style='width:18.8%'><col style='width:22.5%'></colgroup>
+<thead><tr><th>Group</th><th>VaR(95%)</th><th><strong>CVaR(95%)</strong></th><th>MDD</th><th>Recovery</th></tr></thead><tbody>
+<tr><td>2 factors</td><td>0.92%</td><td><strong>1.28%</strong></td><td>−53.7%</td><td>8 periods (~2 years)</td></tr>
+<tr><td>3 factors</td><td>2.54%</td><td>2.93%</td><td>−52.0%</td><td>5 periods</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig5_stress.png'><figcaption></figcaption></figure>
+<table>
+<colgroup><col style='width:10.3%'><col style='width:29.4%'><col style='width:60.3%'></colgroup>
+<thead><tr><th>#</th><th>Location</th><th>Result</th></tr></thead><tbody>
+<tr><td>1</td><td>Label</td><td>✅ computed from <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>available_at</code></td></tr>
+<tr><td>2</td><td>Standardisation</td><td>✅ <strong>code scan: 0 full-sample <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>fit_transform</code> calls</strong></td></tr>
+<tr><td>3</td><td>Thresholds</td><td>✅ all use within-period rank</td></tr>
+<tr><td>4</td><td>Universe</td><td>✅ row-level <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>tradable</code> flags</td></tr>
+<tr><td>5</td><td>Mask</td><td>✅ limit-up flag from the entry day</td></tr>
+</tbody></table>
+<div class='pb'></div>
+<h1>6. Conclusion</h1>
+<h2>6.1 Verdict: REVISE (research further)</h2>
+<table>
+<colgroup><col style='width:41.1%'><col style='width:41.1%'><col style='width:17.8%'></colgroup>
+<thead><tr><th>Condition</th><th>Result</th><th>Verdict</th></tr></thead><tbody>
+<tr><td>Mechanism passes</td><td>1 of 5 factors PROCEED</td><td>⚠️ partial</td></tr>
+<tr><td>Signal passes</td><td>spread 13.92× cost</td><td>✅</td></tr>
+<tr><td>Model valid</td><td>significant incremental over E1-valid baseline</td><td>✅</td></tr>
+<tr><td>Long-only net excess &gt; 0</td><td><strong>+1.26%/yr</strong></td><td>✅</td></tr>
+<tr><td>break-even ≥ 2× cost</td><td><strong>2.36×</strong></td><td>✅</td></tr>
+<tr><td><strong>DSR &gt; 0.95</strong></td><td><strong>0.8153</strong></td><td>❌</td></tr>
+</tbody></table>
+<p><strong>None of the four STOP conditions is met</strong> (there is a mechanism, spread far exceeds cost, long side has excess, break-even 2.36×).</p>
+<p style='text-align:center'>→ It does not qualify to &#x27;proceed&#x27;, it does not qualify to &#x27;stop&#x27;, so it lands on &#x27;<strong>study further</strong>&#x27;.</p>
+<h2>6.2 Death conditions (7, machine-checkable)</h2>
+<table>
+<colgroup><col style='width:9.7%'><col style='width:66.7%'><col style='width:23.6%'></colgroup>
+<thead><tr><th>#</th><th>Condition</th><th>Action</th></tr></thead><tbody>
+<tr><td>D1</td><td>Rolling 12-month long-only net excess ≤ 0</td><td>declare dead, archive</td></tr>
+<tr><td>D2</td><td>Rolling 6-month IC ≤ 0</td><td>declare dead, archive</td></tr>
+<tr><td>D3</td><td>≥2 of 3 regime slices show an IC of opposite sign</td><td>declare dead</td></tr>
+<tr><td>D4</td><td>DSR &lt; 0.5 on new data</td><td>declare dead</td></tr>
+<tr><td>D5</td><td>Live TCA shows real cost &gt; 49.5bp</td><td>declare dead</td></tr>
+<tr><td>D6</td><td>Capacity falls below RMB 5M</td><td>declare dead</td></tr>
+<tr><td>D7</td><td>Mechanism refuted (IC traced to a known confounder)</td><td>declare dead</td></tr>
+</tbody></table>
+<blockquote>Why this must be written down: research without death conditions never dies — it always finds a reason to &#x27;wait one more quarter&#x27;. That is unfalsifiable research, and unfalsifiable is not science.</blockquote>
+<h2>6.3 One-sentence summary</h2>
+<blockquote>We produced a factor whose point estimate is positive (net excess +1.26%), whose cost tolerance is comfortable (break-even 2.36×), but whose statistical evidence is insufficient (DSR 0.8153) and whose capacity is constrained (RMB 21.4M). With 17 years of data and 15 trials, we cannot upgrade &#x27;possible&#x27; to &#x27;confirmed&#x27;. And none of the four STOP conditions is met, so it should not be declared dead either. The only answer is: study further.</blockquote>
+<h1>7. Limitations and Next Steps</h1>
+<h2>7.1 Ten known gaps</h2>
+<table>
+<colgroup><col style='width:8.2%'><col style='width:43.8%'><col style='width:47.9%'></colgroup>
+<thead><tr><th>#</th><th>Gap</th><th>Impact</th></tr></thead><tbody>
+<tr><td>1</td><td><strong>Engine parity not done</strong></td><td>Only a vectorised engine; semantic drift cannot be ruled out</td></tr>
+<tr><td>2</td><td><strong>Exposure attribution not done</strong></td><td>No industry (3.4% coverage), no float mcap, no style factors</td></tr>
+<tr><td>3</td><td><strong>Industry-neutral IC only via 2 crude groups</strong></td><td>Industry confounder cannot be ruled out</td></tr>
+<tr><td>4</td><td>Three stress tests are approximations (S3/S5/S6)</td><td>Not genuinely rebuilt</td></tr>
+<tr><td>5</td><td>Conditional slippage modelling not done</td><td>Only an overall doubling</td></tr>
+<tr><td>6</td><td>SHAP attribution not implemented</td><td>Inapplicable to a zero-parameter model, but the rule is registered</td></tr>
+<tr><td>7</td><td>holdout not unlocked</td><td>Deferred because DSR failed</td></tr>
+<tr><td>8</td><td>ADDV values are assumptions</td><td>Capacity and cost estimates depend on them</td></tr>
+<tr><td>9</td><td>regime slices have only 12-20 observations each</td><td>Magnitudes unreliable; read direction only</td></tr>
+<tr><td>10</td><td>D4 turnover estimate was 2× too high</td><td>Corrected by E4 measurement</td></tr>
+</tbody></table>
+<h2>7.2 Three paths forward</h2>
+<h3>Path 1 (highest priority): drop the small-cap bucket</h3>
+<p><strong>The clue E2 left behind</strong>: <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code> bucket IC is 0.0238 (low turnover) / 0.0315 (mid) / <strong>0.0329 (high)</strong> — stronger in liquid names, opposite to the &#x27;small caps have more alpha&#x27; intuition.</p>
+<table>
+<colgroup><col style='width:25.7%'><col style='width:35.7%'><col style='width:38.6%'></colgroup>
+<thead><tr><th>Dimension</th><th>Now</th><th>After dropping small caps</th></tr></thead><tbody>
+<tr><td>Capacity</td><td>RMB 43M</td><td><strong>~RMB 390M (9×)</strong></td></tr>
+<tr><td>IC</td><td>0.0279</td><td>~0.0329 (+18%)</td></tr>
+<tr><td>Sharpe</td><td>0.728</td><td>~0.86</td></tr>
+<tr><td>DSR</td><td>0.8153</td><td>~0.88 (<strong>still short</strong>)</td></tr>
+</tbody></table>
+<p><strong>Be honest about the expectation</strong>: it probably still will not clear 0.95. But a failure after trying is a cleaner failure — right now small-cap noise may be dragging IC down; after the test, if it fails in every liquidity bucket, it can be genuinely declared dead.</p>
+<h3>Path 2: close two reporting gaps</h3>
+<table>
+<colgroup><col style='width:35.7%'><col style='width:64.3%'></colgroup>
+<thead><tr><th>Gap</th><th>How to close</th></tr></thead><tbody>
+<tr><td>Engine parity</td><td>Implement an event-driven engine, run the same protocol, attribute differences to the ten semantics</td></tr>
+<tr><td>Exposure attribution</td><td>Complete CSMAR industry coverage to 100% + float market cap + style factors</td></tr>
+</tbody></table>
+<div class='pb'></div>
+<h1>Appendix A — Key numbers</h1>
+<table>
+<colgroup><col style='width:20.8%'><col style='width:41.7%'><col style='width:37.5%'></colgroup>
+<thead><tr><th>Category</th><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>Data</td><td>Quotes</td><td>14,899,513 rows / 5,970 stocks / 4,097 days</td></tr>
+<tr><td>Data</td><td>Financials</td><td>319,786 rows / 5,964 stocks / 83 periods</td></tr>
+<tr><td>Data</td><td>Valid labels</td><td>10,149,322 (68.1%)</td></tr>
+<tr><td>Data</td><td>Snapshot</td><td>snap-1778b81371ea59fa (227 files / 11.32 GB)</td></tr>
+<tr><td>Features</td><td>Candidates → passed</td><td>5 → <strong>1</strong></td></tr>
+<tr><td>Features</td><td>Max correlation</td><td>|ρ| = 0.173</td></tr>
+<tr><td>Features</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>mom_60</code> control</td><td>IC <strong>−0.1027</strong> (A-share 60d is reversal)</td></tr>
+<tr><td>Model</td><td>Model</td><td>zero-parameter equal weight</td></tr>
+<tr><td>Model</td><td>Non-linearity ΔIC</td><td>−0.0036 / −0.0062 (negative, below threshold)</td></tr>
+<tr><td>Model</td><td>Permutation test</td><td>p = 0.000</td></tr>
+<tr><td>Model</td><td>Interval coverage / width</td><td>89.9% / 0.89 (full range 1.00)</td></tr>
+<tr><td>Model</td><td>Brier vs constant baseline</td><td>0.2757 vs <strong>0.2386</strong> (worse than guessing)</td></tr>
+<tr><td>Evaluation</td><td><strong>Long-only annualised net excess</strong></td><td><strong>+1.26%</strong></td></tr>
+<tr><td>Evaluation</td><td>Benchmark</td><td>+4.36%</td></tr>
+<tr><td>Evaluation</td><td><strong>break-even</strong></td><td><strong>49.5bp (2.36×)</strong></td></tr>
+<tr><td>Evaluation</td><td>Real one-way cost</td><td>20.9bp</td></tr>
+<tr><td>Evaluation</td><td>Sharpe (excess)</td><td>+0.728 (95% CI [+0.193, +1.262])</td></tr>
+<tr><td>Evaluation</td><td><strong>DSR</strong></td><td><strong>0.8153</strong></td></tr>
+<tr><td>Evaluation</td><td>MDD / recovery</td><td>−53.7% / 8 periods</td></tr>
+<tr><td>Evaluation</td><td>CVaR(95%)</td><td>1.28%</td></tr>
+<tr><td>Evaluation</td><td>Stress matrix</td><td>5/8</td></tr>
+<tr><td>Evaluation</td><td><strong>Capacity</strong></td><td><strong>RMB 43M (feasible RMB 21.4M)</strong></td></tr>
+<tr><td>Evaluation</td><td>alpha-to-go retained</td><td>96%</td></tr>
+</tbody></table>
+<h1>Appendix B — The 15 rejected options</h1>
+<table>
+<colgroup><col style='width:8.2%'><col style='width:38.4%'><col style='width:53.4%'></colgroup>
+<thead><tr><th>#</th><th>Rejected</th><th>Rationale</th></tr></thead><tbody>
+<tr><td>1</td><td>Classification models</td><td>Probability does not enter the decision, and would require an extra threshold</td></tr>
+<tr><td>2</td><td>GBDT / random forest</td><td>Non-linearity ΔIC is negative</td></tr>
+<tr><td>3</td><td>Ridge / LASSO / ENet</td><td>Equal weight +0.0496 &gt; Ridge +0.0300; p/n violated</td></tr>
+<tr><td>4</td><td>IC-weighted composite</td><td>Difference 0.0001; manufacturing +0.003 swamped by weight error 0.258</td></tr>
+<tr><td>5</td><td>Probability calibration</td><td>Ranking only; Brier worse than the constant baseline</td></tr>
+<tr><td>6</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></td><td>t_hac 1.03; long excess −0.058%</td></tr>
+<tr><td>7</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code> as signal</td><td>Timing flat → belongs to state</td></tr>
+<tr><td>8</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code> / <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></td><td>4× horizon mismatch + timing failure</td></tr>
+<tr><td>9</td><td>Manufacturing group as the main line</td><td>Only 17 periods; annual vs H=60 mismatch</td></tr>
+<tr><td>10</td><td>3 factors as the main line</td><td>Sharpe 0.536 &lt; 2-factor 0.728</td></tr>
+<tr><td>11</td><td>Index as benchmark</td><td>Would mix universe difference into excess</td></tr>
+<tr><td>12</td><td>Long-short portfolio return</td><td>A-shares cannot be shorted; 72-90% comes from the short side</td></tr>
+<tr><td>13</td><td>RMB 100M AUM</td><td>Capacity RMB 43M, exceeds by 234%</td></tr>
+<tr><td>14</td><td>The M-V stage&#x27;s DSR of 1.0000</td><td>T used periods, not years</td></tr>
+<tr><td>15</td><td>SHAP attribution</td><td>For a zero-parameter model it equals the score itself</td></tr>
+</tbody></table>
+<h1>Appendix C — Methodological lesson: metric drift</h1>
+<p><strong>This study exposed a class of error that is easy to overlook. The same composite showed three different IC values across three documents:</strong></p>
+<table>
+<colgroup><col style='width:27.4%'><col style='width:20.5%'><col style='width:52.1%'></colgroup>
+<thead><tr><th>Source</th><th>IC</th><th>Cause</th></tr></thead><tbody>
+<tr><td>M-S</td><td>0.0402</td><td>rank computed <strong>within folds</strong> (mixing ~14 periods)</td></tr>
+<tr><td>E2 / E3 v1</td><td>0.0512</td><td>rank computed <strong>across the whole panel</strong> (mixing 73 periods)</td></tr>
+<tr><td><strong>Correct</strong></td><td><strong>0.0496</strong></td><td><strong>rank must be computed within each period</strong></td></tr>
+</tbody></table>
+<p><strong>None of them raised an error; none produced absurd numbers. They only surfaced during cross-checking.</strong></p>
+<p><strong>Five common forms of metric drift</strong>:</p>
+<table>
+<colgroup><col style='width:8.2%'><col style='width:34.2%'><col style='width:57.5%'></colgroup>
+<thead><tr><th>#</th><th>Drift type</th><th>Example</th></tr></thead><tbody>
+<tr><td>1</td><td><strong>Scope of <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>rank</code></strong></td><td>within period / across periods / whole sample</td></tr>
+<tr><td>2</td><td><strong>Denominator</strong></td><td>fixed factor count / available factor count</td></tr>
+<tr><td>3</td><td><strong>Sample range</strong></td><td>complete coverage / partial coverage</td></tr>
+<tr><td>4</td><td><strong>Quantile reference</strong></td><td>current period / baseline period</td></tr>
+<tr><td>5</td><td><strong>Order of averaging</strong></td><td>average per period then combine / pool then compute</td></tr>
+</tbody></table>
+<p><strong>Remedy</strong>: maintain a single metric registry (<code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>docs/02_data/metric_spec.md</code>) that pins down each metric&#x27;s algorithm, and have every later step reference it rather than recomputing its own version.</p>
+</body></html>

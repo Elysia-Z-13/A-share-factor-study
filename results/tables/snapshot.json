@@ -1,0 +1,109 @@
+{
+  "snapshot": {
+    "snapshotId": "snap-1778b81371ea59fa",
+    "files": 227,
+    "totalBytes": 12158943041,
+    "computedAt": "2026-11-20 06:04"
+  },
+  "rules": {
+    "universe": {
+      "version": "v1.0",
+      "effective": "2026-11-20",
+      "rules": {
+        "min_listed_days": 250,
+        "exclude_st": true,
+        "amount_rank_min": 0.2,
+        "require_quote": true
+      }
+    },
+    "mask": {
+      "version": "v1.0",
+      "effective": "2026-11-20",
+      "rules": {
+        "exclude_limit_up": true,
+        "exclude_limit_down": false
+      }
+    },
+    "label": {
+      "version": "v1.0",
+      "effective": "2026-11-20",
+      "rules": {
+        "convention": "next-open-to-open",
+        "horizon": 60,
+        "fill_price": "open",
+        "rebalance_interval": 20
+      }
+    }
+  },
+  "params": {
+    "H": 60,
+    "purge_calendar_days": 90,
+    "cost_bp_one_way": 10,
+    "mad_k": 3,
+    "mad_to_sigma": 1.4826,
+    "winsor_p": 0.01,
+    "train_end": "2024-09-30",
+    "holdout_start": "2025-01-01",
+    "n_splits": 5,
+    "min_listed_days": 250
+  },
+  "seeds": {
+    "random_forest": 42,
+    "permutation_test": 42,
+    "gbdt": 42
+  },
+  "code": {
+    "build_fin_factors.py": "39458e19ec41d0b1",
+    "CLEAN.py": "96bb8e70c031b763",
+    "clean_all.py": "ac86ccb77470b6e6",
+    "clean_fin.py": "cd1c8af4d921620a",
+    "D2.py": "3087d57c1796106e",
+    "d2_pit.py": "2918a3c552ad7859",
+    "d3_universe.py": "34b211f81011c73d",
+    "d4_label.py": "d9efd353398f692d",
+    "d5_split.py": "c9b89fe7513c86bf",
+    "d6_missing.py": "98bcc7d1dcc03af5",
+    "d7_versioning.py": "43409d2e4a75ebdd",
+    "export_mlft_data.py": "9e422035070c9c50",
+    "label.py": "ce3dbcc0d9df281b"
+  },
+  "run_order": [
+    "clean_all.py",
+    "clean_fin.py",
+    "build_fin_factors.py",
+    "export_mlft_data.py",
+    "d2_pit.py",
+    "d3_universe.py",
+    "d4_label.py",
+    "d5_split.py",
+    "d6_missing.py",
+    "d7_versioning.py"
+  ],
+  "psi": [
+    {
+      "factor": "gm",
+      "psi": 0.03138437067807538,
+      "verdict": "稳定"
+    },
+    {
+      "factor": "dgm_q",
+      "psi": 0.49266215610536596,
+      "verdict": "重训"
+    },
+    {
+      "factor": "transfer_intensity",
+      "psi": 0.04553477625756824,
+      "verdict": "稳定"
+    },
+    {
+      "factor": "dep_rate",
+      "psi": 0.02311880892424771,
+      "verdict": "稳定"
+    },
+    {
+      "factor": "gm_vol",
+      "psi": 0.00902187453607307,
+      "verdict": "稳定"
+    }
+  ]
+}

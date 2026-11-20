@@ -1,0 +1,761 @@
+<!DOCTYPE html><html lang='zh-CN'><head>
+<meta charset='utf-8'>
+<title>A 股财务因子的截面预测能力</title>
+<style>
+@page { size: A4; margin: 18mm 16mm 16mm 16mm;
+        @bottom-center { content: counter(page); } }
+* { box-sizing: border-box; }
+body { font-family: "Microsoft YaHei", "Segoe UI", -apple-system, sans-serif;
+       font-size: 10.5pt; line-height: 1.65; color: #1a1a1a; margin: 0; }
+h1 { font-size: 19pt; color: #1f4e79; border-bottom: 2.5px solid #1f4e79;
+     padding-bottom: 6px; margin: 26px 0 14px; page-break-after: avoid; }
+h2 { font-size: 14pt; color: #1f4e79; margin: 20px 0 10px;
+     border-left: 4px solid #1f4e79; padding-left: 9px; page-break-after: avoid; }
+h3 { font-size: 11.5pt; color: #333; margin: 15px 0 8px; page-break-after: avoid; }
+p { margin: 0 0 8px; text-align: justify; }
+strong { color: #0d2f52; }
+pre { background: #f5f7f9; border-left: 3px solid #1f4e79; padding: 10px 14px;
+      font-family: Consolas, "Courier New", monospace; font-size: 8.8pt;
+      line-height: 1.5; overflow-x: auto; white-space: pre-wrap;
+      page-break-inside: avoid; margin: 10px 0; border-radius: 3px; }
+blockquote { border-left: 3px solid #1f4e79; background: #f8fafc;
+             margin: 12px 0; padding: 9px 14px; color: #444; font-style: italic; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0 16px;
+        font-size: 8.8pt; page-break-inside: avoid; }
+th { background: #1f4e79; color: #fff; padding: 6px 7px; text-align: center;
+     font-weight: 600; border: 0.5px solid #1f4e79; }
+td { padding: 5px 7px; border: 0.5px solid #d0d7de; vertical-align: top; }
+tr:nth-child(even) td { background: #f6f8fa; }
+td:not(:first-child) { text-align: center; }
+td:first-child { text-align: left; }
+figure { margin: 14px 0; page-break-inside: avoid; text-align: center; }
+figure img { max-width: 100%; border: 0.5px solid #e0e0e0; border-radius: 3px; }
+figcaption { font-size: 9pt; color: #666; margin-top: 5px; font-style: italic; }
+.cover { text-align: center; padding-top: 110px; page-break-after: always; }
+.cover h1 { border: none; font-size: 30pt; margin-bottom: 12px; }
+.cover .sub { font-size: 13pt; color: #666; margin-bottom: 55px; }
+.cover table { width: 62%; margin: 0 auto; font-size: 10pt; }
+.cover td { border: none; text-align: right; padding: 5px 10px; background: none !important; }
+.cover td:last-child { text-align: left; font-weight: 600; }
+.cover td:first-child { color: #1f4e79; font-weight: 600; }
+.toc { page-break-after: always; }
+.toc div { margin: 3px 0; }
+.toc .l1 { font-weight: 700; color: #1f4e79; font-size: 11pt; margin-top: 7px; }
+.toc .l2 { padding-left: 22px; font-size: 10pt; color: #333; }
+.pb { page-break-after: always; }
+</style></head><body>
+<div class='cover'>
+<h1>A 股财务因子的截面预测能力</h1>
+<div class='sub'>按 MLFT 七段流水线对一个因子假设的完整检验</div>
+<table>
+<tr><td>研究区间</td><td>2010-01-04 ~ 2026-11-18</td></tr>
+<tr><td>样本</td><td>A 股全市场，5,970 只，4,097 个交易日</td></tr>
+<tr><td>标签</td><td>未来 60 交易日收益（next-open-to-open）</td></tr>
+<tr><td>流水线进度</td><td>33 / 41 步</td></tr>
+<tr><td>最终裁决</td><td>再研究（REVISE）</td></tr>
+<tr><td>报告日期</td><td>2026-11-21</td></tr>
+</table></div>
+<h1>摘要</h1>
+<p>本研究检验一个具体假设：<strong>上市公司的毛利率水平及其变化，能否预测其未来 60 个交易日的股票收益？</strong></p>
+<p>按 MLFT 七段流水线（41 步 / 37 道门禁）完成 33 个步骤后，得到六条结论：</p>
+<ul>
+<li><strong>统计上显著</strong>：3 因子等权合成的 Rank IC = +0.0496，HAC t = 3.06，置换检验 p = 0.000</li>
+<li><strong>经济上为正但薄</strong>：多头组合年化净收益 +5.63%（基准 +4.36%），<strong>净超额 +1.26%</strong></li>
+<li><strong>成本上安全</strong>：盈亏平衡成本 49.5bp，是真实成本 20.9bp 的 <strong>2.36 倍</strong></li>
+<li><strong>但统计证据不足</strong>：通缩夏普 <strong>DSR = 0.8153</strong>，未达 0.95 门槛</li>
+<li><strong>且规模受限</strong>：容量上限 <strong>0.43 亿</strong>，1 亿 AUM 超容量 234%</li>
+<li><strong>且正在衰减</strong>：2021-2024 年净超额趋零，机制检验中 5 个因子有 4 个被判 STOP</li>
+</ul>
+<blockquote>因此不能宣称策略成立。本报告的价值不在于「找到一个赚钱的策略」，而在于展示一次完整的、带门禁的、允许得出否定结论的研究应该怎么做。</blockquote>
+<table>
+<colgroup><col style='width:38.0%'><col style='width:39.2%'><col style='width:22.8%'></colgroup>
+<thead><tr><th>指标</th><th>数值</th><th>判定</th></tr></thead><tbody>
+<tr><td>样本区间</td><td>2010-01-04 ~ 2026-11-18</td><td>—</td></tr>
+<tr><td>样本规模</td><td>5,970 只 / 4,097 交易日 / 14,899,513 行</td><td>—</td></tr>
+<tr><td>候选因子 → 通过机制检验</td><td>5 个 → <strong>1 个</strong></td><td>⚠️</td></tr>
+<tr><td>Rank IC（3 因子等权）</td><td>+0.0496，HAC t = <strong>3.06</strong></td><td>✅ 过 t&gt;3</td></tr>
+<tr><td>置换检验</td><td>p = <strong>0.000</strong>（真实 IC 是零分布 p95 的 8~14 倍）</td><td>✅</td></tr>
+<tr><td>年化净收益 / 基准</td><td>+5.63% / +4.36%</td><td>✅</td></tr>
+<tr><td><strong>多头端年化净超额</strong></td><td><strong>+1.26%</strong></td><td>⚠️ 薄</td></tr>
+<tr><td><strong>break-even / 真实成本</strong></td><td><strong>49.5bp / 20.9bp = 2.36×</strong></td><td>✅ 过 2×</td></tr>
+<tr><td>Sharpe（超额）</td><td>+0.728，95% CI [+0.193, +1.262]</td><td>⚠️ 宽</td></tr>
+<tr><td><strong>DSR</strong></td><td><strong>0.8153</strong>（门槛 0.95）</td><td>❌ <strong>不过</strong></td></tr>
+<tr><td>最大回撤 / 恢复时间</td><td>−53.7% / 8 期（约 2 年）</td><td>⚠️</td></tr>
+<tr><td>压力矩阵</td><td><strong>5/8 为正</strong></td><td>❌</td></tr>
+<tr><td><strong>容量</strong></td><td><strong>0.43 亿</strong>（1 亿 AUM 超 234%）</td><td>❌</td></tr>
+</tbody></table>
+<p style='text-align:center'><strong>流水线进度：33/41，止步于 E7 的 G5.4（DSR &gt; 0.95）</strong></p>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig11_pipeline.png'><figcaption></figcaption></figure>
+<div class='pb'></div>
+<div class='toc'><h1>目录</h1>
+<div class='l1'>摘要</div>
+<div class='l1'>一、研究问题与设计</div>
+<div class='l2'>1.1 决策问题</div>
+<div class='l2'>1.2 为什么这样设定</div>
+<div class='l2'>1.3 为什么用 MLFT 流水线</div>
+<div class='l1'>二、数据处理：剔掉「未来」和「买不到」</div>
+<div class='l2'>2.1 数据源</div>
+<div class='l2'>2.2 决策一：用法定披露截止日代理公告日</div>
+<div class='l2'>2.3 决策二：时点对齐的 IC 差异</div>
+<div class='l2'>2.4 决策三：剔除不可成交样本</div>
+<div class='l1'>三、特征工程：三步滤网</div>
+<div class='l2'>3.1 三步滤网与 5 个候选因子</div>
+<div class='l2'>3.2 一个被查出的 4 倍时限错配</div>
+<div class='l2'>3.3 四类驱动与角色分离</div>
+<div class='l2'>3.4 对照实验：A 股 60 日是反转不是动量</div>
+<div class='l1'>四、模型建立：为什么用零参数等权</div>
+<div class='l2'>4.1 复杂度受数据量硬约束</div>
+<div class='l2'>4.2 非线性需不需要</div>
+<div class='l2'>4.3 等权还是 IC 加权</div>
+<div class='l2'>4.4 需不需要校准</div>
+<div class='l1'>五、评估：逐层加深的七道关卡</div>
+<div class='l2'>5.1 E1 机制评估</div>
+<div class='l2'>5.2 E2 信号评估</div>
+<div class='l2'>5.3 E3 模型是否成立</div>
+<div class='l2'>5.4 E4 策略评估</div>
+<div class='l2'>5.5 E5 成本评估</div>
+<div class='l2'>5.6 E6 换手与容量</div>
+<div class='l2'>5.7 E7 统计推断</div>
+<div class='l1'>六、结论</div>
+<div class='l1'>七、局限与下一步</div>
+<div class='l1'>附录 A　关键数字总表</div>
+<div class='l1'>附录 B　被否掉的 15 个选项</div>
+<div class='l1'>附录 C　方法论收获：口径漂移</div>
+</div>
+<h1>一、研究问题与设计</h1>
+<h2>1.1 决策问题</h2>
+<blockquote>给定一只 A 股股票，其最近一期财报的毛利率水平、及毛利率的环比变化，能否预测它未来 60 个交易日的收益？</blockquote>
+<h2>1.2 为什么这样设定</h2>
+<table>
+<colgroup><col style='width:20.3%'><col style='width:29.1%'><col style='width:50.6%'></colgroup>
+<thead><tr><th>设计项</th><th>取值</th><th>依据</th></tr></thead><tbody>
+<tr><td><strong>预测期限</strong></td><td>60 交易日（约 1 季度）</td><td>与财报披露频率匹配；过短信息未反映，过长噪声主导</td></tr>
+<tr><td><strong>标签构造</strong></td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>open_adj[t+H+1] / open_adj[t+1] − 1</code></td><td><strong>T 日收盘决策 → T+1 开盘成交</strong>，避免「同 bar 成交」这一可交易性前视</td></tr>
+<tr><td><strong>收益口径</strong></td><td>long-only（只做多）</td><td><strong>A 股不能做空</strong>（融券成本高、券源有限），空头端收益不可变现</td></tr>
+<tr><td><strong>基准</strong></td><td>等权 universe（同一批可交易股票的等权平均）</td><td>用指数（如沪深 300）会把「宇宙差异」混进超额——我们的 universe 偏中小市值</td></tr>
+<tr><td><strong>成功标准</strong></td><td>Rank IC 0.02~0.05</td><td>行业经验：&gt; 0.10 先查泄漏；&lt; 0.02 覆盖不了成本</td></tr>
+</tbody></table>
+<h2>1.3 为什么用 MLFT 流水线</h2>
+<p>MLFT 是 41 步 / 37 道门禁的强制顺序流程。选它的原因：</p>
+<ul>
+<li><strong>门禁是可判定的</strong>，不是主观判断——不通过就退回，无法自我说服「再调调就好」</li>
+<li><strong>退回要记根因</strong>（R1 数据缺失 / R2 时点泄漏 / R3 规格契约缺失 / R4 统计纪律 / R5 证据不足 / R6 制度约束 / R7 流程跳步）</li>
+<li><strong>试验要记账</strong>，供最后的 DSR（通缩夏普）扣除搜索偏差</li>
+</ul>
+<p>本次研究共执行 <strong>37 次门禁，退回 5 次</strong>（RB-001 ~ RB-005）。</p>
+<div class='pb'></div>
+<h1>二、数据处理：剔掉「未来」和「买不到」</h1>
+<h2>2.1 数据源</h2>
+<table>
+<colgroup><col style='width:29.1%'><col style='width:41.8%'><col style='width:29.1%'></colgroup>
+<thead><tr><th>数据</th><th>规模</th><th>用途</th></tr></thead><tbody>
+<tr><td>日频行情（CSMAR）</td><td>14,899,513 行 / 5,970 只 / 4,097 交易日</td><td>价格、成交额、可交易性</td></tr>
+<tr><td>利润表（FS_Comins）</td><td>319,786 行 / 5,964 只 / 83 期</td><td>毛利率</td></tr>
+<tr><td>资产负债表（FS_Combas）</td><td>同上</td><td>固定资产</td></tr>
+<tr><td>固定资产附注（FN_Fn020）</td><td>63,474 行 / 17 期</td><td>转固强度、折旧率</td></tr>
+</tbody></table>
+<h2>2.2 决策一：用法定披露截止日代理公告日</h2>
+<p><strong>问题</strong>：CSMAR 的 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>DeclareDate</code>（实际公告日）填充率极低。</p>
+<table>
+<colgroup><col style='width:58.3%'><col style='width:41.7%'></colgroup>
+<thead><tr><th>表</th><th>DeclareDate 填充率</th></tr></thead><tbody>
+<tr><td>FS_Comins（利润表）</td><td>5.0%</td></tr>
+<tr><td>FS_Combas（资产负债表）</td><td>7.7%</td></tr>
+<tr><td>FN_Fn020（固定资产附注）</td><td><strong>无此列</strong></td></tr>
+</tbody></table>
+<p><strong>三个选项</strong>：</p>
+<table>
+<colgroup><col style='width:39.2%'><col style='width:60.8%'></colgroup>
+<thead><tr><th>选项</th><th>后果</th></tr></thead><tbody>
+<tr><td>用 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>Accper</code>（报告期）对齐</td><td>❌ <strong>偷看未来</strong>——报告期结束日远早于公告日</td></tr>
+<tr><td>只用有 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>DeclareDate</code> 的样本</td><td>❌ 丢掉 92~95% 的数据</td></tr>
+<tr><td><strong>用法定披露截止日</strong></td><td>✅ 保守（永远不会提前），覆盖 100%</td></tr>
+</tbody></table>
+<p><strong>采用的代理规则</strong>（依据《证券法》信息披露要求）：</p>
+<pre>年报（12-31）  → 次年 4 月 30 日
+一季报（3-31） → 当年 4 月 30 日
+半年报（6-30） → 当年 8 月 31 日
+三季报（9-30） → 当年 10 月 31 日</pre>
+<p><strong>代价与收益</strong>：信号可用时间被系统性推迟（最长 4 个月），但换来 0 处前视违规、覆盖率 100%。</p>
+<h2>2.3 决策二：时点对齐的 IC 差异</h2>
+<table>
+<colgroup><col style='width:34.2%'><col style='width:21.5%'><col style='width:44.3%'></colgroup>
+<thead><tr><th>对齐方式</th><th>Rank IC</th><th>含义</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>Accper</code>（报告期）</td><td>0.01382</td><td>❌ 偷看了未来</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>available_at</code>（公告日/截止日）</td><td>0.00774</td><td>✅ 真实可得</td></tr>
+</tbody></table>
+<p style='text-align:center'><strong>两者相差 1.78 倍——这就是「前视偏差」的价格。</strong></p>
+<h2>2.4 决策三：剔除不可成交样本</h2>
+<table>
+<colgroup><col style='width:31.6%'><col style='width:21.5%'><col style='width:46.8%'></colgroup>
+<thead><tr><th>剔除项</th><th>行数</th><th>原因</th></tr></thead><tbody>
+<tr><td>入场日（T+1）涨停</td><td><strong>231,158</strong></td><td>涨停价没有卖盘，买不进</td></tr>
+<tr><td>T+1 一字涨停</td><td><strong>60,225</strong></td><td>同上</td></tr>
+<tr><td>复牌首日（停牌 &gt; 10 天）</td><td><strong>28,864</strong></td><td>复牌首日价格异常</td></tr>
+<tr><td>ST / *ST</td><td>—</td><td>制度约束（涨跌停 5%）</td></tr>
+<tr><td>上市不足 250 日</td><td>—</td><td>次新股价格发现未完成</td></tr>
+<tr><td>成交额后 20%</td><td>—</td><td>流动性不足</td></tr>
+</tbody></table>
+<blockquote>如果回测里「买入」了一只涨停股，第二天它继续涨 5%，你的回测收益 +5%——但你实际根本买不进。这 +5% 是假的，属于「可交易性前视」。</blockquote>
+<p><strong>这四类样本占原始数据的 20.8%。</strong></p>
+<p><strong>数据版本</strong>：快照 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>snap-1778b81371ea59fa</code>（227 个文件 / 11.32 GB），所有中间产物带哈希，任何结果可追溯。</p>
+<div class='pb'></div>
+<h1>三、特征工程：三步滤网</h1>
+<h2>3.1 三步滤网与 5 个候选因子</h2>
+<table>
+<colgroup><col style='width:16.5%'><col style='width:40.5%'><col style='width:43.0%'></colgroup>
+<thead><tr><th>关</th><th>问题</th><th>不合格的后果</th></tr></thead><tbody>
+<tr><td><strong>① 时限对齐</strong></td><td>特征的回看窗与标签期限是否匹配？</td><td>错配会让 IC 被稀释，甚至产生虚假信号</td></tr>
+<tr><td><strong>② 机制归属</strong></td><td>它属于四类驱动中的哪一类？</td><td>说不出驱动的特征不进模型</td></tr>
+<tr><td><strong>③ 角色分离</strong></td><td>它是 signal / state / control？</td><td>把 state 当 signal 用会导致换手爆炸</td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:22.1%'><col style='width:29.9%'><col style='width:18.2%'><col style='width:13.0%'><col style='width:16.9%'></colgroup>
+<thead><tr><th>因子</th><th>定义</th><th>来源</th><th>覆盖率</th><th>实际披露频率</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></td><td>毛利率 =（营收−成本）/营收</td><td>利润表</td><td>98.0%</td><td><strong>季度</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td>单季毛利率环比差分</td><td>利润表</td><td>96.2%</td><td><strong>季度</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code></td><td>毛利率 4 期滚动标准差</td><td>利润表</td><td>94.4%</td><td><strong>季度</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code></td><td>在建工程转入 / 固定资产原值期初</td><td><strong>附注</strong></td><td><strong>19.8%</strong></td><td><strong>年度</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></td><td>累计折旧本期增加 / 原值期初</td><td><strong>附注</strong></td><td><strong>19.8%</strong></td><td><strong>年度</strong></td></tr>
+</tbody></table>
+<h2>3.2 一个被查出的 4 倍时限错配</h2>
+<p><strong>最初标注</strong>：<code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code> / <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code> 的回看窗 =「最近一期」≈ 60 交易日 → 等长匹配 ✅</p>
+<p><strong>核对报告月分布后</strong>：</p>
+<pre>实际分布 = {6 月: 3,929 行, 12 月: 59,547 行, 3 月 / 9 月: 0 行}
+→ 固定资产明细附注只在半年报与年报披露
+→ 实质是「一年一期」，信息新鲜度最长 12 个月 ≈ 250 交易日
+→ 相对 H = 60 是 4 倍错配</pre>
+<p><strong>这个错误直到 E1 才被彻底证实</strong>——错配的因子在 timing placebo 上会留下指纹：<strong>3 年前的滞后比当期还强。</strong></p>
+<h2>3.3 四类驱动与角色分离</h2>
+<table>
+<colgroup><col style='width:21.5%'><col style='width:15.2%'><col style='width:63.3%'></colgroup>
+<thead><tr><th>因子</th><th>驱动</th><th>机制叙事</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></td><td><strong>风险补偿</strong></td><td>质量溢价：高毛利 = 定价能力强 = 竞争壁垒，市场对质量要求补偿</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td><strong>持续性</strong></td><td>毛利率改善会延续（基本面动量），市场对边际改善反应不足</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code></td><td>持续性</td><td>在建工程转固 → 产能落地 → 营收增长是持续过程</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></td><td>持续性</td><td>资产老化 → 持续资本开支压力</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code></td><td><strong>风险补偿</strong></td><td>低波动异象：偏好彩票型的投资者低估稳定股</td></tr>
+</tbody></table>
+<p><strong>分布缺陷（如实记录）</strong>：风险补偿 2 个、持续性 3 个、<strong>均值回复 0 个、可预测时钟 0 个</strong>——因子集合同质化。</p>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig13_correlation.png' style='width:77%'><figcaption></figcaption></figure>
+<p><strong>PCA 方差解释</strong>（3 因子，全市场组）：39.4% / 32.7% / 27.9% —— 几乎均分，说明三个因子近似正交。</p>
+<h2>3.4 对照实验：A 股 60 日是反转不是动量</h2>
+<table>
+<colgroup><col style='width:40.5%'><col style='width:21.5%'><col style='width:38.0%'></colgroup>
+<thead><tr><th>对照因子</th><th>IC</th><th>含义</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>mom_60</code>（60 日动量）</td><td><strong>−0.1027</strong></td><td><strong>A 股的 60 日是反转，不是动量</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>rev_5_ma60</code>（5 日反转相对 60 日均线）</td><td>−0.0685</td><td>同样为负</td></tr>
+</tbody></table>
+<p><strong>这纠正了一个常见的直觉错误</strong>：如果凭直觉假设动量为正，会用反方向。</p>
+<div class='pb'></div>
+<h1>四、模型建立：为什么用零参数等权</h1>
+<h2>4.1 复杂度受数据量硬约束</h2>
+<pre>参数-样本比   p / n &lt; 1/50       即   n &gt; 50 × p
+
+n = 独立观测数（不是行数）
+p = 模型参数量
+
+我们的 n：独立财报期 = 64 个（不是 179,750 行）
+         → p 必须 &lt; 1.28</pre>
+<table>
+<colgroup><col style='width:34.2%'><col style='width:16.5%'><col style='width:19.0%'><col style='width:17.7%'><col style='width:12.7%'></colgroup>
+<thead><tr><th>模型</th><th>参数 p</th><th>需要 n &gt;</th><th>我们 n=64</th><th>判定</th></tr></thead><tbody>
+<tr><td><strong>等权 / 排序</strong></td><td><strong>0</strong></td><td>—</td><td>—</td><td>✅</td></tr>
+<tr><td>Ridge / LASSO</td><td>3</td><td>150</td><td>❌ 差 2.3 倍</td><td>❌</td></tr>
+<tr><td>单棵决策树（d=3）</td><td>~8</td><td>400</td><td>❌</td><td>❌</td></tr>
+<tr><td>GBDT（100 棵 d=3）</td><td>~800</td><td>40,000</td><td>❌ 差 625 倍</td><td>❌</td></tr>
+<tr><td>随机森林（200 棵 d=5）</td><td>~6,400</td><td>320,000</td><td>❌</td><td>❌</td></tr>
+<tr><td>Transformer（1 层 d=64）</td><td>~5,000</td><td>250,000</td><td>❌ 差 3,900 倍</td><td>❌</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig7_complexity.png'><figcaption></figcaption></figure>
+<h2>4.2 非线性需不需要</h2>
+<p>先看三条定性证据，再过一道定量硬门槛。</p>
+<table>
+<colgroup><col style='width:25.3%'><col style='width:40.5%'><col style='width:34.2%'></colgroup>
+<thead><tr><th>证据</th><th>怎么查</th><th>结果</th></tr></thead><tbody>
+<tr><td>分位单调性</td><td>因子分 10 桶看收益是否单调</td><td>78% 同号（非严格单调）</td></tr>
+<tr><td>残差结构</td><td>线性拟合后残差按特征分桶</td><td>制造业组有轻微结构</td></tr>
+<tr><td>交互显著性</td><td>双变量交叉分组</td><td>2 个因子有交互</td></tr>
+</tbody></table>
+<p>第 1、3 条部分成立 → 需要实测验证。<strong>实测对比</strong>（5 折，期内 rank 口径）：</p>
+<table>
+<colgroup><col style='width:42.9%'><col style='width:28.6%'><col style='width:28.6%'></colgroup>
+<thead><tr><th>模型</th><th>全市场组 IC</th><th>制造业组 IC</th></tr></thead><tbody>
+<tr><td><strong>等权（p=0）</strong></td><td><strong>+0.0496</strong></td><td>+0.0215</td></tr>
+<tr><td>LASSO</td><td>+0.0217</td><td>+0.0380</td></tr>
+<tr><td>Ridge</td><td>+0.0300</td><td><strong>+0.0556</strong></td></tr>
+<tr><td>GBDT</td><td>+0.0264</td><td>+0.0494</td></tr>
+<tr><td>GBDT（早停）</td><td>—</td><td>+0.0540</td></tr>
+<tr><td>随机森林</td><td>+0.0194</td><td>+0.0471</td></tr>
+</tbody></table>
+<pre>非线性增量（GBDT − Ridge）：
+  全市场组：+0.0264 − 0.0300 = -0.0036   （负！）
+  制造业组：+0.0494 − 0.0556 = -0.0062   （负！）
+
+硬门槛要求 ΔIC &gt; 0.003
+→ 非线性不但没过门槛，而且是负的
+→ 判定：不用非线性</pre>
+<h2>4.3 等权还是 IC 加权</h2>
+<table>
+<colgroup><col style='width:32.5%'><col style='width:23.4%'><col style='width:23.4%'><col style='width:20.8%'></colgroup>
+<thead><tr><th>组</th><th>等权 IC</th><th>IC 加权 IC</th><th>差异</th></tr></thead><tbody>
+<tr><td>全市场组</td><td><strong>+0.0496</strong></td><td>+0.0495</td><td>+0.0001</td></tr>
+<tr><td>制造业组</td><td>+0.0592</td><td><strong>+0.0622</strong></td><td>−0.0030</td></tr>
+</tbody></table>
+<p><strong>诚实的权衡</strong>：</p>
+<pre>全市场组：差异可忽略 → 等权胜在 p = 0（无参数估计误差）
+
+制造业组：IC 加权高 0.003
+  但只有 17 个独立期，权重估计标准误 ≈ 1/√17 = 0.258
+  → 估计误差（0.258）远大于收益（0.003）
+  → 净判断：等权更稳</pre>
+<p><strong>最终采用等权</strong>，并记录一个反例：若未来独立期 &gt; 50，权重估计误差会降到 1/√50 ≈ 0.14，届时 IC 加权可能值得用。</p>
+<h2>4.4 需不需要校准</h2>
+<p><strong>唯一的判定问题</strong>：下游用不用「水平」？</p>
+<table>
+<colgroup><col style='width:61.5%'><col style='width:38.5%'></colgroup>
+<thead><tr><th>下游怎么用</th><th>需要校准？</th></tr></thead><tbody>
+<tr><td><strong>只按分数排序选 top-k</strong></td><td>❌ <strong>不需要</strong></td></tr>
+<tr><td>用概率做阈值开仓</td><td>✅ 必须</td></tr>
+<tr><td>用概率做仓位加权</td><td>✅ 必须</td></tr>
+<tr><td>把分数当预期收益用</td><td>❌ 禁止</td></tr>
+</tbody></table>
+<p><strong>为什么排序不需要校准（数学证明）</strong>：</p>
+<pre>IC = Spearman(s, y) = Pearson(rank(s), rank(y))
+任取单调递增变换 g：rank(g(s)) = rank(s)
+→ IC(g(s), y) = IC(s, y)
+→ 选 top-k 的集合完全相同 → 权重相同 → 换手相同
+→ 什么都没变</pre>
+<p><strong>但仍做了区间校准作为方法论演示</strong>：</p>
+<table>
+<colgroup><col style='width:33.8%'><col style='width:29.7%'><col style='width:36.5%'></colgroup>
+<thead><tr><th>组</th><th>边际覆盖率</th><th>区间宽度（全距 1.00）</th></tr></thead><tbody>
+<tr><td>全市场</td><td>89.9% ✅</td><td>0.89</td></tr>
+<tr><td>制造业</td><td>89.6% ✅</td><td>0.89</td></tr>
+</tbody></table>
+<blockquote>覆盖率达标 ≠ 模型有用。对照「无条件区间」（不看因子，直接给 [0.05, 0.95]）：宽度 0.90、覆盖率 90%。我们的 0.89 只比 0.90 窄 1%——几乎等于什么都没学到。等价说法：R² ≈ IC² ≈ 0.0016，只解释了 0.16% 的方差。</blockquote>
+<table>
+<colgroup><col style='width:30.1%'><col style='width:24.7%'><col style='width:24.7%'><col style='width:20.5%'></colgroup>
+<thead><tr><th>组</th><th>Brier（原始）</th><th><strong>常数基线</strong></th><th>ECE</th></tr></thead><tbody>
+<tr><td>全市场</td><td>0.2757</td><td><strong>0.2386</strong></td><td>0.16</td></tr>
+<tr><td>制造业</td><td>0.2648</td><td><strong>0.2155</strong></td><td>0.19</td></tr>
+</tbody></table>
+<p><strong>模型的概率比「瞎猜」还差</strong>（Brier 越高越差）。</p>
+<div class='pb'></div>
+<h1>五、评估：逐层加深的七道关卡</h1>
+<h2>5.1 E1 机制评估：5 个因子只有 1 个通过</h2>
+<p><strong>方法</strong>：四驱动选一 → DAG 三角色 → 四项证伪 → 记分卡裁决。</p>
+<table>
+<colgroup><col style='width:20.3%'><col style='width:27.8%'><col style='width:25.3%'><col style='width:26.6%'></colgroup>
+<thead><tr><th>检查</th><th>做法</th><th>期望</th><th>失败信号</th></tr></thead><tbody>
+<tr><td><strong>timing placebo</strong></td><td>特征滞后 1/2/3/4 个报告期</td><td>滞后 0 最强、单调衰减</td><td>远处更强 → 慢变状态代理</td></tr>
+<tr><td><strong>shared-driver</strong></td><td>同期内打乱未来收益作伪标签</td><td>IC ≈ 0</td><td>仍显著 → 有共同驱动</td></tr>
+<tr><td><strong>regime 分区</strong></td><td>按 5 个市场时段分别算 IC</td><td>符号稳定</td><td>某区翻转且显著</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig6_mechanism_matrix.png'><figcaption></figcaption></figure>
+<p><strong>最有价值的发现——一条完整的因果链。</strong> <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code> 的 timing placebo：</p>
+<pre>k0 (当期)  +0.0449
+k1         +0.0227
+k2         +0.0366
+k3         +0.0535   ← 比当期还强
+k4         +0.0525
+
+手册的失败信号原话：
+  远处滞后仍持平甚至上升 → 它是慢变状态变量的代理</pre>
+<p><strong>解读</strong>：一个 3 年前的年报数据比最新的还有效 → 它不是「信息」，是「制造业资本开支周期」这个状态的代理。这种东西不能用来择时——你不知道它什么时候会变。</p>
+<p><strong><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code> 的 timing placebo</strong>：</p>
+<pre>k0 -0.0310  k1 -0.0302  k2 -0.0296  k3 -0.0310  k4 -0.0258
+→ 几乎完全平坦
+→ 它描述的是公司长期的波动特征，不是新鲜事件
+→ 它是 state（状态变量），不是 signal（信号）</pre>
+<p style='text-align:center'><strong>这两条与「4 倍时限错配」完全吻合。而唯一时限对齐正确的 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code>，也是唯一通过全部四项证伪的因子。</strong></p>
+<p><strong>DAG 三角色</strong>（一个反直觉的部分）：</p>
+<table>
+<colgroup><col style='width:19.0%'><col style='width:26.6%'><col style='width:20.3%'><col style='width:34.2%'></colgroup>
+<thead><tr><th>角色</th><th>定义</th><th>该不该控制</th><th>判错的后果</th></tr></thead><tbody>
+<tr><td><strong>confounder</strong></td><td>同时影响特征与标签</td><td>✅ 要控制</td><td>不控制 → 把混杂当 alpha</td></tr>
+<tr><td><strong>mediator</strong></td><td>特征 → 中介 → 标签</td><td>❌ 不要控制</td><td>控制 → 切掉真实通道</td></tr>
+<tr><td><strong>collider</strong></td><td>特征与标签<strong>共同影响它</strong></td><td>❌ <strong>绝不能控制</strong></td><td><strong>控制 → 凭空造出负相关</strong></td></tr>
+</tbody></table>
+<p><strong>诚实披露的缺口</strong>：DAG 判定行业是 confounder 应控制，但 CSMAR 行业分类只有 3.4% 覆盖、且是快照而非历史快照，无法重建「当时所属行业」。只能用「是否制造业」2 组粗代理（非制造业 +0.0259、制造业 +0.0347），说明因子不是单纯的行业配置效应，但差异确实存在。</p>
+<h2>5.2 E2 信号评估：IC 的口径与 long-only 的现实</h2>
+<table>
+<colgroup><col style='width:21.5%'><col style='width:38.0%'><col style='width:40.5%'></colgroup>
+<thead><tr><th>项</th><th>规则</th><th>理由</th></tr></thead><tbody>
+<tr><td><strong>计算单位</strong></td><td>每期截面一次 rank IC，再对期平均</td><td>股票-日混算会虚增显著性</td></tr>
+<tr><td><strong>显著性</strong></td><td>t 值用 <strong>HAC</strong>（滞后 ≥ 标签期限）</td><td>IC 序列有自相关</td></tr>
+<tr><td><strong>样本数 n</strong></td><td><strong>有效报告期数（70）</strong>，不是股票-日（184,456）</td><td>用行数会把 t 吹到约 430</td></tr>
+<tr><td><strong>报告内容</strong></td><td>均值、ICIR、HAC t、正的占比、分年度</td><td>单点均值无信息量</td></tr>
+</tbody></table>
+<p><strong>HAC（Newey-West）修正的结果</strong>：</p>
+<table>
+<colgroup><col style='width:25.3%'><col style='width:15.2%'><col style='width:13.9%'><col style='width:15.2%'><col style='width:16.5%'><col style='width:13.9%'></colgroup>
+<thead><tr><th>因子</th><th>IC</th><th>ICIR</th><th>t_naive</th><th><strong>t_hac</strong></th><th>SE 膨胀</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td>+0.0279</td><td>+0.708</td><td>5.92</td><td><strong>+4.19</strong></td><td>1.41×</td></tr>
+<tr><td>3 因子组合</td><td>+0.0496</td><td>+0.566</td><td>—</td><td><strong>+3.06</strong></td><td>1.63×</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code></td><td>−0.0311</td><td>−0.609</td><td>−5.09</td><td>−3.84</td><td>1.33×</td></tr>
+<tr><td><strong><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></strong></td><td>+0.0257</td><td>+0.226</td><td>1.91</td><td><strong>+1.03</strong></td><td><strong>1.85×</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></td><td>+0.0346</td><td>+0.482</td><td>1.87</td><td>+2.55</td><td>0.73×</td></tr>
+</tbody></table>
+<p style='text-align:center'><strong>HAC 修正直接改变了两个结论：<code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code> 从 1.91 掉到 1.03（不显著）；3 因子组合从 5.03 掉到 3.06（刚过门槛）。</strong></p>
+<h3>本步最重要的发现：超额几乎全在空头端</h3>
+<table>
+<colgroup><col style='width:27.8%'><col style='width:19.0%'><col style='width:20.3%'><col style='width:16.5%'><col style='width:16.5%'></colgroup>
+<thead><tr><th>因子</th><th>多空价差</th><th><strong>多头超额</strong></th><th>空头占比</th><th>long-only</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td>+1.421%</td><td><strong>+0.136%</strong></td><td><strong>90%</strong></td><td>❌</td></tr>
+<tr><td>3 因子组合</td><td>+2.783%</td><td><strong>+0.777%</strong></td><td>72%</td><td>⚠️ 勉强</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></td><td>+2.334%</td><td>+0.673%</td><td>71%</td><td>⚠️ 流动性不过</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code></td><td>—</td><td><strong>−0.102%</strong></td><td>&gt;100%</td><td>❌</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></td><td>+1.216%</td><td><strong>−0.058%</strong></td><td>105%</td><td>❌</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig10_long_short_split.png'><figcaption></figcaption></figure>
+<pre>dgm_q 的账：
+  多空价差 +1.421% 看起来健康
+  但多头超额只有 +0.136%，空头贡献 +1.284%（占 90%）
+  → A 股不能做空 → 那 1.284% 拿不到
+  → 年化 = 0.136% × (252/60) = 0.57%
+  → 年化成本 0.84%（当时估计） → 净超额为负</pre>
+<p><strong>我们最强的因子（<code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code>，t_hac 4.19）在 long-only 下是亏的。</strong></p>
+<p><strong>流动性分桶</strong>：</p>
+<table>
+<colgroup><col style='width:27.8%'><col style='width:17.7%'><col style='width:15.2%'><col style='width:19.0%'><col style='width:20.3%'></colgroup>
+<thead><tr><th>因子</th><th>低成交额</th><th>中</th><th><strong>高成交额</strong></th><th>判定</th></tr></thead><tbody>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td>+0.0238</td><td>+0.0315</td><td><strong>+0.0329</strong></td><td>✅ 高流动更强</td></tr>
+<tr><td>3 因子组合</td><td>+0.0438</td><td>+0.0530</td><td><strong>+0.0650</strong></td><td>✅</td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code></td><td>+0.0285</td><td>+0.0436</td><td><strong>+0.0734</strong></td><td>✅</td></tr>
+<tr><td><strong><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></strong></td><td><strong>+0.0581</strong></td><td>+0.0277</td><td>+0.0313</td><td>❌ <strong>只在低流动桶最强</strong></td></tr>
+</tbody></table>
+<p><strong>一个反直觉发现（后来成为改进方向）</strong>：<code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code> 在<strong>高流动性桶 IC 更强</strong>（0.0329 vs 0.0238），与「小盘 alpha 更高」的直觉相反。这意味着「剔除小盘档」可能是双赢——<strong>容量 ×9 且不损失 alpha</strong>。</p>
+<h2>5.3 E3 模型是否成立</h2>
+<p><strong>手册定义</strong>：「模型成立」不是「IC 显著」，而是四条<strong>同时</strong>满足。</p>
+<table>
+<colgroup><col style='width:16.2%'><col style='width:43.8%'><col style='width:21.2%'><col style='width:18.8%'></colgroup>
+<thead><tr><th>层</th><th>对象</th><th>IC</th><th>t_hac</th></tr></thead><tbody>
+<tr><td>L1</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code> 单独</td><td>−0.0311</td><td>−3.87</td></tr>
+<tr><td>L1</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code> 单独</td><td>+0.0279</td><td>+4.22</td></tr>
+<tr><td>L1</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code> 单独</td><td>+0.0257</td><td>+1.03</td></tr>
+<tr><td>L2</td><td>Ridge</td><td>+0.0300</td><td>+3.40</td></tr>
+<tr><td>L3</td><td>GBDT</td><td>+0.0264</td><td>+3.94</td></tr>
+<tr><td><strong>L1.5</strong></td><td><strong>3 因子等权（我们的模型）</strong></td><td><strong>+0.0496</strong></td><td><strong>+3.06</strong></td></tr>
+</tbody></table>
+<p><strong>判据二：增量显著（两把尺）</strong></p>
+<table>
+<colgroup><col style='width:31.5%'><col style='width:15.7%'><col style='width:13.5%'><col style='width:25.8%'><col style='width:13.5%'></colgroup>
+<thead><tr><th>基线</th><th>配对差</th><th>t_hac</th><th>95% CI</th><th>排除零？</th></tr></thead><tbody>
+<tr><td><strong><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></strong>（E1 PROCEED）</td><td>+0.0233</td><td><strong>+2.20</strong></td><td>[+0.0024, +0.0410]</td><td><strong>✅</strong></td></tr>
+<tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code>（E1 STOP，方向调整后）</td><td>+0.0185</td><td>+0.84</td><td>[−0.0245, +0.0615]</td><td>❌</td></tr>
+</tbody></table>
+<pre>⚠️ 一个必须做的方向调整：
+❌ 用 gm_vol 原始值（IC = -0.0311）当基线
+   → 配对差被虚增到 0.0823（一端全负、一端全正）
+✅ 用 -gm_vol（IC = +0.0311）当基线
+   → 配对差 0.0185（对应「持有低 gm_vol」这个真实策略）
+
+不做这个调整，会算出「配对差 t = 6.16，极显著」的假结果。</pre>
+<p><strong>判据三：跨特征集（本步最有价值的检验）</strong></p>
+<table>
+<colgroup><col style='width:34.1%'><col style='width:18.3%'><col style='width:17.1%'><col style='width:30.5%'></colgroup>
+<thead><tr><th>特征集</th><th>IC</th><th>t_hac</th><th>变化</th></tr></thead><tbody>
+<tr><td>全 3 因子</td><td>+0.0496</td><td>3.06</td><td>—</td></tr>
+<tr><td><strong>删 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code></strong></td><td><strong>+0.0391</strong></td><td><strong>1.68</strong></td><td><strong>变不显著</strong></td></tr>
+<tr><td><strong>删 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></strong></td><td>+0.0417</td><td><strong>7.89</strong></td><td><strong>t 值暴涨</strong></td></tr>
+<tr><td>只剩 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code></td><td>+0.0279</td><td>4.22</td><td>—</td></tr>
+</tbody></table>
+<pre>三个发现：
+① 删 gm_vol → t_hac 从 3.06 掉到 1.68（不显著）
+   → 组合的显著性依赖 gm_vol
+   → 而 E1 判定 gm_vol 是慢变状态变量，不是信号
+   → 组合的核心贡献者机制上不成立（E1 与 E3 的核心矛盾）
+
+② 删 gm → IC 降了但 t 从 3.06 涨到 7.89
+   → gm 提升了点估计但大幅增加方差
+   → 从稳健性角度应删掉它
+
+③ 最稳的配置是 2 因子（gm_vol + dgm_q），不是 3 因子</pre>
+<h2>5.4 E4 策略评估</h2>
+<table>
+<colgroup><col style='width:30.4%'><col style='width:69.6%'></colgroup>
+<thead><tr><th>项</th><th>约定</th></tr></thead><tbody>
+<tr><td>信号时点</td><td>T 日收盘</td></tr>
+<tr><td><strong>成交时点与价格</strong></td><td><strong>T+1 开盘（<code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>open_adj[t+1]</code>）</strong></td></tr>
+<tr><td><strong>不可成交</strong></td><td><strong>涨停不能买 / 跌停不能卖 / 停牌不成交</strong></td></tr>
+<tr><td>剔除</td><td>ST / 次新 / 流动性后 20%</td></tr>
+<tr><td><strong>成本扣除</strong></td><td><strong>在成交时扣，参与复利</strong></td></tr>
+<tr><td><strong>空头</strong></td><td><strong>无</strong></td></tr>
+<tr><td><strong>基准</strong></td><td><strong>等权 universe（自算，非指数）</strong></td></tr>
+</tbody></table>
+<p><strong>引擎选择：向量化</strong>。判据是「协议能否写成时间戳信号 + 目标敞口 + 成本公式而不改变含义」——我们不做熔断/止损/第二腿依赖/分笔撮合，所以可以。但必须逐条封住五种语义漂移：</p>
+<table>
+<colgroup><col style='width:38.2%'><col style='width:61.8%'></colgroup>
+<thead><tr><th>症状</th><th>我们的做法</th></tr></thead><tbody>
+<tr><td><strong>同 bar 成交</strong></td><td>T 日信号 → <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>open_adj[t+1]</code> 起算</td></tr>
+<tr><td>缺失 bar 隐含成交</td><td>只用有 label 的行（要求 T+1 与 T+H+1 都有行情）</td></tr>
+<tr><td>前向填充造出可交易性</td><td><strong>完全不做价格填充</strong></td></tr>
+<tr><td>权重无视现金</td><td>等权 top-k，权重和 = 1，无杠杆</td></tr>
+<tr><td>成本不检查融资</td><td>无融资</td></tr>
+</tbody></table>
+<p><strong>九指标（gross / net / 基准 三者并列）</strong>：</p>
+<table>
+<colgroup><col style='width:44.4%'><col style='width:27.8%'><col style='width:27.8%'></colgroup>
+<thead><tr><th>指标</th><th>2 因子（主线）</th><th>3 因子（对照）</th></tr></thead><tbody>
+<tr><td>年化毛</td><td>+6.56%</td><td>+7.46%</td></tr>
+<tr><td>年化净</td><td><strong>+6.12%</strong></td><td><strong>+7.04%</strong></td></tr>
+<tr><td>基准</td><td>+4.36%</td><td>+4.36%</td></tr>
+<tr><td><strong>净超额</strong></td><td><strong>+1.75%</strong></td><td><strong>+2.68%</strong></td></tr>
+<tr><td><strong>Sharpe（超额）</strong></td><td><strong>+1.01</strong></td><td>+0.65</td></tr>
+<tr><td>MDD</td><td>−52.4%</td><td>−50.8%</td></tr>
+<tr><td>胜率（超额 &gt; 0）</td><td>68%</td><td>63%</td></tr>
+<tr><td>换手（年）</td><td>2.10 倍</td><td>1.98 倍</td></tr>
+<tr><td>持仓数</td><td>723 只（top-30%）</td><td>723 只</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig3_nav.png'><figcaption></figcaption></figure>
+<p><strong>分年度：衰减清晰可见</strong></p>
+<table>
+<colgroup><col style='width:14.7%'><col style='width:17.6%'><col style='width:17.6%'><col style='width:14.7%'><col style='width:17.6%'><col style='width:17.6%'></colgroup>
+<thead><tr><th>年份</th><th>2 因子</th><th>3 因子</th><th>年份</th><th>2 因子</th><th>3 因子</th></tr></thead><tbody>
+<tr><td>2011</td><td>+0.3%</td><td>+1.5%</td><td>2018</td><td>+0.8%</td><td>+0.7%</td></tr>
+<tr><td>2012</td><td>−0.5%</td><td>+1.4%</td><td>2019</td><td>+0.9%</td><td>+1.8%</td></tr>
+<tr><td>2013</td><td>−0.4%</td><td>+3.0%</td><td><strong>2020</strong></td><td><strong>+2.3%</strong></td><td><strong>+3.5%</strong></td></tr>
+<tr><td>2014</td><td>+0.0%</td><td>−1.5%</td><td>2021</td><td>+0.2%</td><td>−0.3%</td></tr>
+<tr><td>2015</td><td>+0.1%</td><td>+1.2%</td><td>2022</td><td>−0.1%</td><td>−2.1%</td></tr>
+<tr><td>2016</td><td>+0.7%</td><td>+0.0%</td><td>2023</td><td>+0.1%</td><td>−1.2%</td></tr>
+<tr><td>2017</td><td>+1.2%</td><td>+1.2%</td><td>2024</td><td>−0.0%</td><td>−0.6%</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig1_ic_decay.png'><figcaption></figcaption></figure>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig14_drawdown.png'><figcaption></figcaption></figure>
+<h2>5.5 E5 成本评估：E4 低估了 2.1 倍</h2>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig8_cost_breakdown.png'><figcaption></figcaption></figure>
+<table>
+<colgroup><col style='width:17.8%'><col style='width:50.7%'><col style='width:31.5%'></colgroup>
+<thead><tr><th>层</th><th>内容</th><th>我们的值</th></tr></thead><tbody>
+<tr><td><strong>显式</strong></td><td>佣金 2.5bp（双向）+ <strong>印花税 10bp（仅卖出）</strong> + 过户费 0.1bp</td><td>买入 2.6 / 卖出 12.6 / <strong>往返 15.2bp</strong></td></tr>
+<tr><td><strong>隐式</strong></td><td>价差 + 滑点</td><td>按市值档取上界</td></tr>
+<tr><td><strong>容量</strong></td><td>参与率上限、拥挤度</td><td>见 5.6</td></tr>
+</tbody></table>
+<p><strong>按参与率选档</strong>（手册规则）：</p>
+<table>
+<colgroup><col style='width:50.0%'><col style='width:50.0%'></colgroup>
+<thead><tr><th>参与率 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>下单量÷ADDV</code></th><th>模型</th></tr></thead><tbody>
+<tr><td><strong>&lt; 0.5%</strong></td><td>价差模型（成本 = ½ 价差）</td></tr>
+<tr><td>0.5%–2%</td><td>线性滑点</td></tr>
+<tr><td>&gt; 2%</td><td>平方根冲击</td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:18.9%'><col style='width:21.6%'><col style='width:17.6%'><col style='width:21.6%'><col style='width:20.3%'></colgroup>
+<thead><tr><th>档位</th><th>假设 ADDV</th><th>参与率</th><th>落档</th><th>单边成本</th></tr></thead><tbody>
+<tr><td>大盘</td><td>5 亿</td><td>0.01%</td><td>价差模型</td><td>12.6bp</td></tr>
+<tr><td>中盘</td><td>2 亿</td><td>0.04%</td><td>价差模型</td><td>17.6bp</td></tr>
+<tr><td>小盘</td><td>3000 万</td><td>0.24%</td><td>价差模型</td><td>32.6bp</td></tr>
+<tr><td><strong>组合加权</strong></td><td></td><td></td><td></td><td><strong>20.9bp</strong></td></tr>
+</tbody></table>
+<p><strong>对 E4 的重大修正</strong>：</p>
+<table>
+<colgroup><col style='width:32.9%'><col style='width:21.5%'><col style='width:21.5%'><col style='width:24.1%'></colgroup>
+<thead><tr><th>项</th><th>E4</th><th>E5</th><th>差异</th></tr></thead><tbody>
+<tr><td>单边成本</td><td>10bp</td><td><strong>20.9bp</strong></td><td><strong>+10.9bp（2.1 倍）</strong></td></tr>
+<tr><td>2 因子净超额</td><td>+1.75%</td><td><strong>+1.26%</strong></td><td>−0.49pp</td></tr>
+<tr><td>3 因子净超额</td><td>+2.68%</td><td>+2.22%</td><td>−0.46pp</td></tr>
+</tbody></table>
+<table>
+<colgroup><col style='width:19.8%'><col style='width:19.8%'><col style='width:19.8%'><col style='width:16.0%'><col style='width:24.7%'></colgroup>
+<thead><tr><th>组</th><th>break-even</th><th>真实成本</th><th><strong>倍数</strong></th><th>手册 3× 判读</th></tr></thead><tbody>
+<tr><td>2 因子</td><td>49.5bp</td><td>20.9bp</td><td><strong>2.36×</strong></td><td>勉强（过 2× 门禁）</td></tr>
+<tr><td>3 因子</td><td>73.8bp</td><td>20.9bp</td><td><strong>3.52×</strong></td><td>稳健</td></tr>
+</tbody></table>
+<h2>5.6 E6 换手与容量：第一个「不过」</h2>
+<table>
+<colgroup><col style='width:58.3%'><col style='width:41.7%'></colgroup>
+<thead><tr><th>项</th><th>2 因子</th></tr></thead><tbody>
+<tr><td>期换手 / <strong>年换手</strong></td><td>52.6% / <strong>2.10 倍</strong></td></tr>
+<tr><td>平均持有期</td><td>120 交易日</td></tr>
+<tr><td>最大可承受（激进）</td><td>5.25 倍 → 余量 2.50×</td></tr>
+<tr><td>最大可承受（保守）</td><td>3.05 倍 → 余量 <strong>1.45×</strong></td></tr>
+<tr><td>最小所需 edge / 实际</td><td>0.35 / <strong>0.87 bp/天</strong>（2.50×）</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig9_capacity.png'><figcaption></figcaption></figure>
+<blockquote>手册的 A 股约定被完全证实：「小盘股多头端的价差常在 100–500bp，容量往往比成本更早成为约束。」成本侧 break-even 2.36× 过关；容量侧 234% 不过关。</blockquote>
+<p><strong>alpha-to-go</strong>：信号半衰期 ≈ 63 交易日（1 季度），建仓 5 天 → 比值 7.9%，<strong>alpha 保留 96%</strong>。这是低频因子的核心优势。</p>
+<h2>5.7 E7 统计推断：门禁在这里拦下</h2>
+<pre>SE(SR) ≈ √((1 + ½·SR²) ÷ T)      T = 年数，不是期数</pre>
+<table>
+<colgroup><col style='width:37.0%'><col style='width:31.5%'><col style='width:31.5%'></colgroup>
+<thead><tr><th>项</th><th>2 因子</th><th>3 因子</th></tr></thead><tbody>
+<tr><td>超额 Sharpe</td><td>+0.728</td><td>+0.536</td></tr>
+<tr><td>T（年）</td><td>17</td><td>17</td></tr>
+<tr><td>SE</td><td>0.273</td><td>0.259</td></tr>
+<tr><td><strong>95% CI</strong></td><td>[+0.193, +1.262]</td><td><strong>[+0.028, +1.045]</strong></td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig12_sharpe_ci.png'><figcaption></figcaption></figure>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig4_dsr.png'><figcaption></figcaption></figure>
+<table>
+<colgroup><col style='width:20.5%'><col style='width:17.9%'><col style='width:19.2%'><col style='width:21.8%'><col style='width:20.5%'></colgroup>
+<thead><tr><th>组</th><th>口径</th><th>Sharpe</th><th>E[max\|N=15]</th><th><strong>DSR</strong></th></tr></thead><tbody>
+<tr><td>2 因子</td><td>绝对</td><td>+0.385</td><td>0.445</td><td>0.4054</td></tr>
+<tr><td><strong>2 因子</strong></td><td><strong>超额</strong></td><td><strong>+0.728</strong></td><td>0.483</td><td><strong>0.8153</strong></td></tr>
+<tr><td>3 因子</td><td>超额</td><td>+0.536</td><td>0.459</td><td>0.6169</td></tr>
+</tbody></table>
+<pre>DSR 门槛 = SE × √(2 ln N) = 0.273 × 1.893 = 0.483
+我们的 SR = 0.728
+要达到 DSR 0.95，需要 SR &gt; 0.483 + 1.645 × 0.273 = 0.932
+
+差 28%
+
+三条出路：
+① SR 从 0.73 提到 0.93  → 需要新 alpha 源，不是调参
+② T 从 17 年提到 28 年   → 数据只到 2026，不可能
+③ N 从 15 降到 3          → 不诚实，15 次试验真实发生
+
+没有第四条路。</pre>
+<table>
+<colgroup><col style='width:20.0%'><col style='width:18.8%'><col style='width:20.0%'><col style='width:18.8%'><col style='width:22.5%'></colgroup>
+<thead><tr><th>组</th><th>VaR(95%)</th><th><strong>CVaR(95%)</strong></th><th>MDD</th><th>恢复时间</th></tr></thead><tbody>
+<tr><td>2 因子</td><td>0.92%</td><td><strong>1.28%</strong></td><td>−53.7%</td><td>8 期（约 2 年）</td></tr>
+<tr><td>3 因子</td><td>2.54%</td><td>2.93%</td><td>−52.0%</td><td>5 期</td></tr>
+</tbody></table>
+<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig5_stress.png'><figcaption></figcaption></figure>
+<p><strong>泄漏五查（全过）</strong>：</p>
+<table>
+<colgroup><col style='width:10.3%'><col style='width:29.4%'><col style='width:60.3%'></colgroup>
+<thead><tr><th>#</th><th>位置</th><th>结果</th></tr></thead><tbody>
+<tr><td>1</td><td>标签</td><td>✅ 从 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>available_at</code> 起算</td></tr>
+<tr><td>2</td><td>标准化</td><td>✅ <strong>代码扫描 0 处全样本 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>fit_transform</code></strong></td></tr>
+<tr><td>3</td><td>阈值</td><td>✅ 全部用期内 rank</td></tr>
+<tr><td>4</td><td>universe</td><td>✅ 逐行 <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>tradable</code> 标记</td></tr>
+<tr><td>5</td><td>mask</td><td>✅ 涨停用入场当日标记</td></tr>
+</tbody></table>
+<div class='pb'></div>
+<h1>六、结论</h1>
+<h2>6.1 裁决：再研究（REVISE）</h2>
+<table>
+<colgroup><col style='width:41.1%'><col style='width:41.1%'><col style='width:17.8%'></colgroup>
+<thead><tr><th>条件</th><th>结果</th><th>判定</th></tr></thead><tbody>
+<tr><td>机制过</td><td>5 个因子 1 个 PROCEED</td><td>⚠️ 部分</td></tr>
+<tr><td>信号过</td><td>spread 13.92× 成本</td><td>✅</td></tr>
+<tr><td>模型成立</td><td>对有 E1-valid 基线增量显著</td><td>✅</td></tr>
+<tr><td>多头端净超额 &gt; 0</td><td><strong>+1.26%/年</strong></td><td>✅</td></tr>
+<tr><td>break-even ≥ 2× 成本</td><td><strong>2.36×</strong></td><td>✅</td></tr>
+<tr><td><strong>DSR &gt; 0.95</strong></td><td><strong>0.8153</strong></td><td>❌</td></tr>
+</tbody></table>
+<p><strong>四条 STOP 条件一条都不满足</strong>（有机制、spread 远大于成本、多头端有超额、break-even 2.36×）。</p>
+<p style='text-align:center'>→ 不满足「做」，不符合「不做」，落在「<strong>再研究</strong>」。</p>
+<h2>6.2 死亡条件（7 条，可自动判定）</h2>
+<table>
+<colgroup><col style='width:9.7%'><col style='width:66.7%'><col style='width:23.6%'></colgroup>
+<thead><tr><th>#</th><th>条件</th><th>动作</th></tr></thead><tbody>
+<tr><td>D1</td><td>滚动 12 个月多头端净超额 ≤ 0</td><td>判死归档</td></tr>
+<tr><td>D2</td><td>滚动 6 个月 IC ≤ 0</td><td>判死归档</td></tr>
+<tr><td>D3</td><td>3 个 regime 切片中 ≥2 个 IC 与全样本反号</td><td>判死</td></tr>
+<tr><td>D4</td><td>新数据下 DSR &lt; 0.5</td><td>判死</td></tr>
+<tr><td>D5</td><td>实盘 TCA 显示真实成本 &gt; 49.5bp</td><td>判死</td></tr>
+<tr><td>D6</td><td>容量跌破 500 万</td><td>判死</td></tr>
+<tr><td>D7</td><td>机制被推翻（IC 来自已知 confounder）</td><td>判死</td></tr>
+</tbody></table>
+<blockquote>为什么必须写：没有死亡条件的研究永远不会死——它总能找到理由「再等等」。这是不可证伪的研究，而不可证伪的不是科学。</blockquote>
+<h2>6.3 一句话总结</h2>
+<blockquote>我们做出了一个点估计为正（净超额 +1.26%）、成本能承受（break-even 2.36×）、但统计证据不足（DSR 0.8153）、规模受限（2141 万）的因子。用 17 年、15 次试验的数据，我们无法把「可能」升级成「确定」。而那四条 STOP 条件一条都不满足，说明它也不该被判死。所以答案只能是：再研究。</blockquote>
+<h1>七、局限与下一步</h1>
+<h2>7.1 十条已知缺口</h2>
+<table>
+<colgroup><col style='width:8.2%'><col style='width:43.8%'><col style='width:47.9%'></colgroup>
+<thead><tr><th>#</th><th>缺口</th><th>影响</th></tr></thead><tbody>
+<tr><td>1</td><td><strong>引擎 parity 未做</strong></td><td>只有向量化引擎，无法排除语义漂移</td></tr>
+<tr><td>2</td><td><strong>暴露归因未做</strong></td><td>无行业（3.4% 覆盖）、无流通市值、无风格因子</td></tr>
+<tr><td>3</td><td><strong>行业内 IC 只有 2 组粗代理</strong></td><td>无法排除行业 confounder</td></tr>
+<tr><td>4</td><td>压力矩阵三项是近似（S3/S5/S6）</td><td>未真正逐项重建</td></tr>
+<tr><td>5</td><td>滑点的条件建模未做</td><td>只做了整体翻倍</td></tr>
+<tr><td>6</td><td>SHAP 归因未实现</td><td>对零参数模型不适用，但规则已登记</td></tr>
+<tr><td>7</td><td>holdout 未解锁</td><td>因 DSR 不过而推迟</td></tr>
+<tr><td>8</td><td>ADDV 是假设值</td><td>容量与成本估计依赖假设</td></tr>
+<tr><td>9</td><td>regime 每态仅 12~20 观测</td><td>量级不可信，只看方向</td></tr>
+<tr><td>10</td><td>D4 的换手预估偏高 2 倍</td><td>已被 E4 实测纠正</td></tr>
+</tbody></table>
+<h2>7.2 如果继续：三条路径</h2>
+<h3>路径一（最高优先级）：剔除小盘档</h3>
+<p><strong>E2 埋下的线索</strong>：<code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dgm_q</code> 的流动性分桶 IC 为 低 0.0238 / 中 0.0315 / <strong>高 0.0329</strong>——高流动性桶更强，与「小盘 alpha 更高」的直觉相反。</p>
+<table>
+<colgroup><col style='width:25.7%'><col style='width:35.7%'><col style='width:38.6%'></colgroup>
+<thead><tr><th>维度</th><th>现状</th><th>剔除小盘后</th></tr></thead><tbody>
+<tr><td>容量</td><td>0.43 亿</td><td><strong>约 3.9 亿（×9）</strong></td></tr>
+<tr><td>IC</td><td>0.0279</td><td>约 0.0329（+18%）</td></tr>
+<tr><td>Sharpe</td><td>0.728</td><td>约 0.86</td></tr>
+<tr><td>DSR</td><td>0.8153</td><td>约 0.88（<strong>仍不足</strong>）</td></tr>
+</tbody></table>
+<p><strong>要诚实预期</strong>：大概率还是过不了 0.95。但试过之后不过，那个「不过」会更干净——现在可能是小盘噪音拖累了 IC；试过之后若在全市场各流动性档都不成立，就可以真正判死。</p>
+<h3>路径二：补两个报告缺口</h3>
+<table>
+<colgroup><col style='width:35.7%'><col style='width:64.3%'></colgroup>
+<thead><tr><th>缺口</th><th>补法</th></tr></thead><tbody>
+<tr><td>引擎 parity</td><td>实现事件驱动引擎，对同一协议跑，归因差异到十项语义</td></tr>
+<tr><td>暴露归因</td><td>补 CSMAR 行业分类到 100% 覆盖 + 流通市值 + 风格因子</td></tr>
+</tbody></table>
+<div class='pb'></div>
+<h1>附录 A　关键数字总表</h1>
+<table>
+<colgroup><col style='width:20.8%'><col style='width:41.7%'><col style='width:37.5%'></colgroup>
+<thead><tr><th>分类</th><th>项</th><th>值</th></tr></thead><tbody>
+<tr><td>数据</td><td>行情</td><td>14,899,513 行 / 5,970 只 / 4,097 交易日</td></tr>
+<tr><td>数据</td><td>财报</td><td>319,786 行 / 5,964 只 / 83 期</td></tr>
+<tr><td>数据</td><td>标签有效</td><td>10,149,322（68.1%）</td></tr>
+<tr><td>数据</td><td>快照</td><td>snap-1778b81371ea59fa（227 文件 / 11.32 GB）</td></tr>
+<tr><td>特征</td><td>候选 → 通过</td><td>5 → <strong>1</strong></td></tr>
+<tr><td>特征</td><td>最大相关</td><td>|ρ| = 0.173</td></tr>
+<tr><td>特征</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>mom_60</code> 对照</td><td>IC <strong>−0.1027</strong>（A 股 60 日是反转）</td></tr>
+<tr><td>模型</td><td>模型</td><td>零参数等权</td></tr>
+<tr><td>模型</td><td>非线性 ΔIC</td><td>−0.0036 / −0.0062（负，未过门槛）</td></tr>
+<tr><td>模型</td><td>置换检验</td><td>p = 0.000</td></tr>
+<tr><td>模型</td><td>区间覆盖率 / 宽度</td><td>89.9% / 0.89（全距 1.00）</td></tr>
+<tr><td>模型</td><td>Brier vs 常数基线</td><td>0.2757 vs <strong>0.2386</strong>（劣于瞎猜）</td></tr>
+<tr><td>评估</td><td><strong>多头端年化净超额</strong></td><td><strong>+1.26%</strong></td></tr>
+<tr><td>评估</td><td>基准</td><td>+4.36%</td></tr>
+<tr><td>评估</td><td><strong>break-even</strong></td><td><strong>49.5bp（2.36×）</strong></td></tr>
+<tr><td>评估</td><td>真实单边成本</td><td>20.9bp</td></tr>
+<tr><td>评估</td><td>Sharpe（超额）</td><td>+0.728（95% CI [+0.193, +1.262]）</td></tr>
+<tr><td>评估</td><td><strong>DSR</strong></td><td><strong>0.8153</strong></td></tr>
+<tr><td>评估</td><td>MDD / 恢复</td><td>−53.7% / 8 期</td></tr>
+<tr><td>评估</td><td>CVaR(95%)</td><td>1.28%</td></tr>
+<tr><td>评估</td><td>压力矩阵</td><td>5/8</td></tr>
+<tr><td>评估</td><td><strong>容量</strong></td><td><strong>0.43 亿（可行 2141 万）</strong></td></tr>
+<tr><td>评估</td><td>alpha-to-go 保留</td><td>96%</td></tr>
+</tbody></table>
+<h1>附录 B　被否掉的 15 个选项</h1>
+<table>
+<colgroup><col style='width:8.2%'><col style='width:38.4%'><col style='width:53.4%'></colgroup>
+<thead><tr><th>#</th><th>被否的</th><th>依据</th></tr></thead><tbody>
+<tr><td>1</td><td>分类模型</td><td>概率不进入决策，且需额外选阈值</td></tr>
+<tr><td>2</td><td>GBDT / 随机森林</td><td>非线性 ΔIC 为负</td></tr>
+<tr><td>3</td><td>Ridge / LASSO / ENet</td><td>等权 +0.0496 &gt; Ridge +0.0300；p/n 超标</td></tr>
+<tr><td>4</td><td>IC 加权合成</td><td>差异 0.0001；制造业组 +0.003 被权重误差 0.258 覆盖</td></tr>
+<tr><td>5</td><td>概率校准</td><td>只用排序；Brier 劣于常数基线</td></tr>
+<tr><td>6</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></td><td>t_hac 1.03；多头超额 −0.058%</td></tr>
+<tr><td>7</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code> 作 signal</td><td>timing 平坦 → 应归 state</td></tr>
+<tr><td>8</td><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code> / <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>dep_rate</code></td><td>4 倍时限错配 + timing 失败</td></tr>
+<tr><td>9</td><td>制造业组进主线</td><td>仅 17 期；年度与 H=60 错配</td></tr>
+<tr><td>10</td><td>3 因子进主线</td><td>Sharpe 0.536 &lt; 2 因子 0.728</td></tr>
+<tr><td>11</td><td>指数作基准</td><td>会把宇宙差异混进超额</td></tr>
+<tr><td>12</td><td>多空组合收益</td><td>A 股不能做空，空头占 72~90%</td></tr>
+<tr><td>13</td><td>1 亿 AUM</td><td>容量 0.43 亿，超 234%</td></tr>
+<tr><td>14</td><td>M-V 阶段的 DSR 1.0000</td><td>T 用了期数不是年数</td></tr>
+<tr><td>15</td><td>SHAP 归因</td><td>零参数模型下等于分数本身</td></tr>
+</tbody></table>
+<h1>附录 C　方法论收获：口径漂移</h1>
+<p><strong>这次研究暴露了一类容易被忽视的错误。「同一个组合，在三个文档里出现过三个不同的 IC」</strong>：</p>
+<table>
+<colgroup><col style='width:27.4%'><col style='width:20.5%'><col style='width:52.1%'></colgroup>
+<thead><tr><th>出处</th><th>IC</th><th>原因</th></tr></thead><tbody>
+<tr><td>M-S</td><td>0.0402</td><td>rank 在「折内」做（跨 14 期混排）</td></tr>
+<tr><td>E2 / E3 v1</td><td>0.0512</td><td>rank 在「整面板」做（跨 73 期混排）</td></tr>
+<tr><td><strong>正确</strong></td><td><strong>0.0496</strong></td><td><strong>rank 必须在「期内」做</strong></td></tr>
+</tbody></table>
+<p><strong>三者都不报错、数字都不荒谬，只在交叉核对时暴露。</strong></p>
+<p><strong>五种常见的口径漂移</strong>：</p>
+<table>
+<colgroup><col style='width:8.2%'><col style='width:34.2%'><col style='width:57.5%'></colgroup>
+<thead><tr><th>#</th><th>漂移类型</th><th>例</th></tr></thead><tbody>
+<tr><td>1</td><td><strong>rank 的作用域</strong></td><td>期内 / 跨期 / 全样本</td></tr>
+<tr><td>2</td><td><strong>分母定义</strong></td><td>固定因子总数 / 可用因子数</td></tr>
+<tr><td>3</td><td><strong>样本范围</strong></td><td>完全覆盖 / 部分覆盖</td></tr>
+<tr><td>4</td><td><strong>分位数参照</strong></td><td>当期 / 基准期</td></tr>
+<tr><td>5</td><td><strong>平均顺序</strong></td><td>先算各期再平均 / 先池化再算</td></tr>
+</tbody></table>
+<p><strong>应对方式</strong>：建一张「指标口径登记表」（<code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>docs/02_data/metric_spec.md</code>），把每个指标的算法固定下来，后面所有步骤都引用它，不再各算各的。</p>
+</body></html>

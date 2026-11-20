@@ -1,0 +1,139 @@
+{
+  "2因子(gm_vol+dgm_q)": {
+    "turnover_per_period": 0.5255600210727908,
+    "turnover_annual": 2.102240084291163,
+    "holding_days": 119.87213158147433,
+    "gross_excess_ann": 0.02199103694569149,
+    "cost_roundtrip_bp": 41.86666666666667,
+    "max_turnover_aggressive": 5.252636213142871,
+    "max_turnover_conservative": 3.05188403765869,
+    "margin_aggressive": 2.4985900765534894,
+    "margin_conservative": 1.4517295433873956,
+    "min_edge_per_day_bp": 0.3492610510409657,
+    "actual_edge_per_day_bp": 0.8726601962575988,
+    "edge_multiple": 2.4985900765534894,
+    "capacity": {
+      "large": {
+        "addv": 500000000.0,
+        "daily_capacity": 25000000.0,
+        "needed_per_day": 3503733.473818605,
+        "utilization": 0.1401493389527442,
+        "max_aum_bucket": 237841530.9156237,
+        "max_aum_total": 713524592.7468711
+      },
+      "mid": {
+        "addv": 200000000.0,
+        "daily_capacity": 10000000.0,
+        "needed_per_day": 3503733.473818605,
+        "utilization": 0.3503733473818605,
+        "max_aum_bucket": 95136612.36624947,
+        "max_aum_total": 285409837.09874845
+      },
+      "small": {
+        "addv": 30000000.0,
+        "daily_capacity": 1500000.0,
+        "needed_per_day": 3503733.473818605,
+        "utilization": 2.33582231587907,
+        "max_aum_bucket": 14270491.854937421,
+        "max_aum_total": 42811475.564812265
+      }
+    },
+    "capacity_total_min": 42811475.564812265,
+    "aum_target": 100000000.0,
+    "aum_vs_capacity": 2.33582231587907,
+    "alpha_to_go": {
+      "half_life_days": 63.0,
+      "exec_days": 5,
+      "ratio": 0.07936507936507936,
+      "retained": 0.9603174603174603
+    },
+    "icir": 0.7080317171573677
+  },
+  "3因子(+gm)": {
+    "turnover_per_period": 0.49535949832863885,
+    "turnover_annual": 1.9814379933145554,
+    "holding_days": 127.18036135890058,
+    "gross_excess_ann": 0.031070932006204366,
+    "cost_roundtrip_bp": 41.86666666666667,
+    "max_turnover_aggressive": 7.421400956895948,
+    "max_turnover_conservative": 3.4519272184869156,
+    "margin_aggressive": 3.7454621249496713,
+    "margin_conservative": 1.742132345364248,
+    "min_edge_per_day_bp": 0.3291912856617833,
+    "actual_edge_per_day_bp": 1.232973492309697,
+    "edge_multiple": 3.7454621249496713,
+    "capacity": {
+      "large": {
+        "addv": 500000000.0,
+        "daily_capacity": 25000000.0,
+        "needed_per_day": 3302396.6555242585,
+        "utilization": 0.13209586622097033,
+        "max_aum_bucket": 252341986.82321545,
+        "max_aum_total": 757025960.4696463
+      },
+      "mid": {
+        "addv": 200000000.0,
+        "daily_capacity": 10000000.0,
+        "needed_per_day": 3302396.6555242585,
+        "utilization": 0.33023966555242584,
+        "max_aum_bucket": 100936794.72928618,
+        "max_aum_total": 302810384.1878585
+      },
+      "small": {
+        "addv": 30000000.0,
+        "daily_capacity": 1500000.0,
+        "needed_per_day": 3302396.6555242585,
+        "utilization": 2.2015977703495055,
+        "max_aum_bucket": 15140519.209392928,
+        "max_aum_total": 45421557.62817878
+      }
+    },
+    "capacity_total_min": 45421557.62817878,
+    "aum_target": 100000000.0,
+    "aum_vs_capacity": 2.201597770349506,
+    "alpha_to_go": {
+      "half_life_days": 63.0,
+      "exec_days": 5,
+      "ratio": 0.07936507936507936,
+      "retained": 0.9603174603174603
+    },
+    "icir": 0.7080317171573677
+  },
+  "kill_criteria": [
+    {
+      "id": "K1",
+      "name": "成本吃光超额",
+      "rule": "滚动 12 个月净超额 ≤ 0，且非成本模型错",
+      "action": "stop",
+      "priority": "block"
+    },
+    {
+      "id": "K2",
+      "name": "容量不足",
+      "rule": "目标资金 > 容量",
+      "action": "reduce_size",
+      "priority": "block"
+    },
+    {
+      "id": "K3",
+      "name": "符号翻转",
+      "rule": "3 个 regime 切片中 ≥2 个滚动 IC 与全样本反号",
+      "action": "stop",
+      "priority": "block"
+    },
+    {
+      "id": "K4",
+      "name": "回撤失控",
+      "rule": "回撤 > 回测 MDD 的 100%（即 −52.4%）",
+      "action": "stop",
+      "priority": "block"
+    },
+    {
+      "id": "K5",
+      "name": "信号衰减",
+      "rule": "滚动 IC 连续 6 个月为负",
+      "action": "stop",
+      "priority": "block"
+    }
+  ]
+}

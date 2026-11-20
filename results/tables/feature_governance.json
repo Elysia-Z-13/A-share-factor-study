@@ -1,0 +1,192 @@
+{
+  "versions": [
+    {
+      "name": "gm",
+      "version": "v1.0",
+      "effective": "2026-11-20",
+      "status": "active",
+      "defn": "(营业收入−营业成本)/营业收入",
+      "inputs": "FS_Comins.B001101000 / B001201000",
+      "window": "最近一期",
+      "ref": "横截面",
+      "rep": "rank",
+      "note": "首次冻结"
+    },
+    {
+      "name": "dgm_q",
+      "version": "v1.0",
+      "effective": "2026-11-20",
+      "status": "active",
+      "defn": "gm_t − gm_{t−1}",
+      "inputs": "gm 相邻两期",
+      "window": "最近两期",
+      "ref": "横截面",
+      "rep": "rank",
+      "note": "首次冻结"
+    },
+    {
+      "name": "transfer_intensity",
+      "version": "v1.0",
+      "effective": "2026-11-20",
+      "status": "active",
+      "defn": "ΣFn02007(类型1)/ΣFn02003(类型1)",
+      "inputs": "FN_Fn020",
+      "window": "最近一期",
+      "ref": "横截面",
+      "rep": "rank",
+      "note": "分母已从 cip_prev 改为 fa_cost_begin（改含义 v0.9→v1.0）"
+    },
+    {
+      "name": "dep_rate",
+      "version": "v1.1",
+      "effective": "2026-11-20",
+      "status": "active",
+      "defn": "ΣFn02004(类型2)/ΣFn02003(类型1)",
+      "inputs": "FN_Fn020",
+      "window": "最近一期",
+      "ref": "横截面",
+      "rep": "rank",
+      "note": "符号由 −1 修正为 +1（F7 实测推翻 F0 假设，v1.0→v1.1）"
+    },
+    {
+      "name": "gm_vol",
+      "version": "v1.1",
+      "effective": "2026-11-20",
+      "status": "active",
+      "defn": "std(gm 最近4期)",
+      "inputs": "gm 最近 4 期",
+      "window": "4 期滚动",
+      "ref": "横截面",
+      "rep": "rank",
+      "note": "曾误判退役，按样本组重测后恢复（全市场组增量 +0.0310）"
+    }
+  ],
+  "changelog": [
+    {
+      "date": "2026-11-19",
+      "feature": "transfer_intensity",
+      "change": "分母 cip_prev → fa_cost_begin",
+      "type": "改含义",
+      "version": "v0.9 → v1.0",
+      "reason": "茅台转固率用在建工程作分母得 254%（>100% 无意义）；改用固定资产原值后 11.06%"
+    },
+    {
+      "date": "2026-11-20",
+      "feature": "dep_rate",
+      "change": "方向 −1 → +1",
+      "type": "符号修正",
+      "version": "v1.0 → v1.1",
+      "reason": "F7 实测 IC=+0.0346，与 F0 假设（折旧率高→未来收益低）相反；可能机制是折旧率反映产能利用率"
+    },
+    {
+      "date": "2026-11-20",
+      "feature": "gm_vol",
+      "change": "淘汰",
+      "type": "退役",
+      "version": "v1.0 → retired",
+      "reason": "F7 增量测试：加入后组合 IC 0.0626→0.0372，Δ=−0.0253"
+    },
+    {
+      "date": "2026-11-20",
+      "feature": "全部",
+      "change": "可用日口径",
+      "type": "改含义（数据层）",
+      "version": "—",
+      "reason": "CSMAR DeclareDate 仅 5-8% 覆盖；未知时用法定披露截止日代理（年报4/30、半年报8/31、三季报10/31），永不前视"
+    }
+  ],
+  "rules": [
+    {
+      "id": "R1",
+      "name": "连续两轮 IC 不显著",
+      "trigger": "连续 2 次评估 |t| < Bonferroni 门槛",
+      "action": "标记候选退役，进入下一轮观察"
+    },
+    {
+      "id": "R2",
+      "name": "重要度持续近零",
+      "trigger": "SHAP 跨折均值 < 0.01 且标准差 < 0.005",
+      "action": "删除并记入 changelog"
+    },
+    {
+      "id": "R3",
+      "name": "重要度突然跃升",
+      "trigger": "SHAP 环比跃升 > 5 倍",
+      "action": "先查数据（该因子/其他因子覆盖率突变、数据源变更），查清前不动用"
+    }
+  ],
+  "frozen": {
+    "full_market": {
+      "features": [
+        "gm_vol",
+        "dgm_q",
+        "gm"
+      ],
+      "signs": {
+        "gm_vol": -1,
+        "dgm_q": 1,
+        "gm": 1
+      },
+      "coverage": {
+        "gm": 0.98,
+        "dgm_q": 0.962
+      },
+      "composite_ic": 0.0484
+    },
+    "manufacturing": {
+      "features": [
+        "transfer_intensity",
+        "dep_rate"
+      ],
+      "signs": {
+        "transfer_intensity": 1,
+        "dep_rate": 1
+      },
+      "coverage": {
+        "transfer_intensity": 0.198,
+        "dep_rate": 0.198
+      },
+      "composite_ic": 0.0625
+    },
+    "retired": [],
+    "frozen_at": "2026-11-20",
+    "rule": "冻结后进 M 段，特征不得再改；任何改动需新建版本并重跑 F7"
+  },
+  "psi": [
+    {
+      "factor": "gm",
+      "n_base": 262064,
+      "n_cur": 51483,
+      "psi": 0.01014875747041607,
+      "verdict": "稳定"
+    },
+    {
+      "factor": "dgm_q",
+      "n_base": 256317,
+      "n_cur": 51224,
+      "psi": 0.028368700087798054,
+      "verdict": "稳定"
+    },
+    {
+      "factor": "transfer_intensity",
+      "n_base": 52189,
+      "n_cur": 11287,
+      "psi": 0.14395129677297291,
+      "verdict": "关注"
+    },
+    {
+      "factor": "dep_rate",
+      "n_base": 52187,
+      "n_cur": 11287,
+      "psi": 0.02411587514178086,
+      "verdict": "稳定"
+    },
+    {
+      "factor": "gm_vol",
+      "n_base": 250841,
+      "n_cur": 50988,
+      "psi": 0.004893011651682215,
+      "verdict": "稳定"
+    }
+  ]
+}

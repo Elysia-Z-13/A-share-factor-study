@@ -1,0 +1,28 @@
+﻿# 数据（CSMAR 原始数据不入库）
+data/*.csv
+data/*.xlsx
+data/*.parquet
+CLEAN/
+!data/README.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# 结果中间件（保留 JSON 表与图）
+*.log
+*.tmp
+.pytest_cache/
+
+# 系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/

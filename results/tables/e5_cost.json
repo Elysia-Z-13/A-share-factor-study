@@ -1,0 +1,186 @@
+{
+  "2因子(gm_vol+dgm_q)": {
+    "explicit": {
+      "buy_bp": 2.6,
+      "sell_bp": 12.6,
+      "roundtrip_bp": 15.2
+    },
+    "participation": {
+      "large": 0.00014538313169371806,
+      "mid": 0.00036345782923429514,
+      "small": 0.002423052194895301
+    },
+    "bucket_cost": {
+      "large": {
+        "participation": 0.00014538313169371806,
+        "implicit_bp": 5.0,
+        "explicit_avg_bp": 7.6,
+        "total_one_way_bp": 12.6
+      },
+      "mid": {
+        "participation": 0.00036345782923429514,
+        "implicit_bp": 10.0,
+        "explicit_avg_bp": 7.6,
+        "total_one_way_bp": 17.6
+      },
+      "small": {
+        "participation": 0.002423052194895301,
+        "implicit_bp": 25.0,
+        "explicit_avg_bp": 7.6,
+        "total_one_way_bp": 32.6
+      }
+    },
+    "avg_cost_one_way_bp": 20.933333333333334,
+    "ann_gross": 0.06562926755857945,
+    "ann_net_real": 0.05628117123494847,
+    "ann_bench": 0.04363823061288796,
+    "ann_excess_real": 0.012642940622060506,
+    "grid": [
+      {
+        "cost_bp": 0,
+        "ann_net": 0.06562926755857945,
+        "ann_excess": 0.02199103694569149
+      },
+      {
+        "cost_bp": 5,
+        "ann_net": 0.06339082442471766,
+        "ann_excess": 0.0197525938118297
+      },
+      {
+        "cost_bp": 10,
+        "ann_net": 0.06115590967151752,
+        "ann_excess": 0.017517679058629554
+      },
+      {
+        "cost_bp": 15,
+        "ann_net": 0.05892451958925227,
+        "ann_excess": 0.015286288976364304
+      },
+      {
+        "cost_bp": 20,
+        "ann_net": 0.056696650470147825,
+        "ann_excess": 0.013058419857259862
+      },
+      {
+        "cost_bp": 30,
+        "ann_net": 0.05225146030007677,
+        "ann_excess": 0.008613229687188806
+      },
+      {
+        "cost_bp": 40,
+        "ann_net": 0.04782030953813021,
+        "ann_excess": 0.00418207892524225
+      },
+      {
+        "cost_bp": 60,
+        "ann_net": 0.039000007902011635,
+        "ann_excess": -0.004638222710876327
+      },
+      {
+        "cost_bp": 80,
+        "ann_net": 0.030235509200790434,
+        "ann_excess": -0.013402721412097529
+      }
+    ],
+    "breakeven_bp": 49.48284786115908,
+    "breakeven_multiple": 2.3638303118388095,
+    "slippage_double": {
+      "cost_bp": 34.266666666666666,
+      "ann_excess": 0.006720889908436556
+    },
+    "turnover_mean": 0.5255600210727908,
+    "aum": 100000000.0
+  },
+  "3因子(+gm)": {
+    "explicit": {
+      "buy_bp": 2.6,
+      "sell_bp": 12.6,
+      "roundtrip_bp": 15.2
+    },
+    "participation": {
+      "large": 0.0001370289068682265,
+      "mid": 0.00034257226717056624,
+      "small": 0.0022838151144704416
+    },
+    "bucket_cost": {
+      "large": {
+        "participation": 0.0001370289068682265,
+        "implicit_bp": 5.0,
+        "explicit_avg_bp": 7.6,
+        "total_one_way_bp": 12.6
+      },
+      "mid": {
+        "participation": 0.00034257226717056624,
+        "implicit_bp": 10.0,
+        "explicit_avg_bp": 7.6,
+        "total_one_way_bp": 17.6
+      },
+      "small": {
+        "participation": 0.0022838151144704416,
+        "implicit_bp": 25.0,
+        "explicit_avg_bp": 7.6,
+        "total_one_way_bp": 32.6
+      }
+    },
+    "avg_cost_one_way_bp": 20.933333333333334,
+    "ann_gross": 0.07462366056563696,
+    "ann_net_real": 0.06573668455253445,
+    "ann_bench": 0.043552728559432596,
+    "ann_excess_real": 0.022183955993101856,
+    "grid": [
+      {
+        "cost_bp": 0,
+        "ann_net": 0.07462366056563696,
+        "ann_excess": 0.031070932006204366
+      },
+      {
+        "cost_bp": 5,
+        "ann_net": 0.07249594204723309,
+        "ann_excess": 0.02894321348780049
+      },
+      {
+        "cost_bp": 10,
+        "ann_net": 0.0703713847019578,
+        "ann_excess": 0.02681865614252521
+      },
+      {
+        "cost_bp": 15,
+        "ann_net": 0.06824998539720029,
+        "ann_excess": 0.02469725683776769
+      },
+      {
+        "cost_bp": 20,
+        "ann_net": 0.06613174100190511,
+        "ann_excess": 0.022579012442472512
+      },
+      {
+        "cost_bp": 30,
+        "ann_net": 0.061904704423235035,
+        "ann_excess": 0.01835197586380244
+      },
+      {
+        "cost_bp": 40,
+        "ann_net": 0.057690249948551875,
+        "ann_excess": 0.014137521389119279
+      },
+      {
+        "cost_bp": 60,
+        "ann_net": 0.049298987365790525,
+        "ann_excess": 0.005746258806357929
+      },
+      {
+        "cost_bp": 80,
+        "ann_net": 0.040957753611380765,
+        "ann_excess": -0.0025949749480518314
+      }
+    ],
+    "breakeven_bp": 73.77795893400075,
+    "breakeven_multiple": 3.5244247898408,
+    "slippage_double": {
+      "cost_bp": 34.266666666666666,
+      "ann_excess": 0.016552271144430808
+    },
+    "turnover_mean": 0.49535949832863885,
+    "aum": 100000000.0
+  }
+}
