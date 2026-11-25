@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 """E6 换手、容量与 kill"""
+import os
 import sys, json, time
 from pathlib import Path
 import numpy as np
 import pandas as pd
 
-S = Path(r"D:\HuaweiMoveData\Users\战昶旭\Desktop\Test\SCRIPT")
+# metrics.py 所在目录（仓库的 src/）
+S = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(S))
 import metrics as M
 
-ROOT = Path(r"D:\HuaweiMoveData\Users\战昶旭\Desktop\Test")
+# 数据根目录。默认取本仓库上两级（src/<stage>/x.py → 仓库根）。
+# 本地复现时把 FACTOR_STUDY_ROOT 指向你放 CLEAN/ 与 data/ 的目录。
+ROOT = Path(os.environ.get("FACTOR_STUDY_ROOT", Path(__file__).resolve().parents[2]))
 CLEAN = ROOT / "CLEAN"
 
 e4 = json.loads((CLEAN / "meta" / "e4_backtest.json").read_text(encoding="utf-8"))

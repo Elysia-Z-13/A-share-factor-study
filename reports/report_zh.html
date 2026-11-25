@@ -85,7 +85,7 @@ figcaption { font-size: 9pt; color: #666; margin-top: 5px; font-style: italic; }
 <tr><td><strong>容量</strong></td><td><strong>0.43 亿</strong>（1 亿 AUM 超 234%）</td><td>❌</td></tr>
 </tbody></table>
 <p style='text-align:center'><strong>流水线进度：33/41，止步于 E7 的 G5.4（DSR &gt; 0.95）</strong></p>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig11_pipeline.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig11_pipeline.png'><figcaption></figcaption></figure>
 <div class='pb'></div>
 <div class='toc'><h1>目录</h1>
 <div class='l1'>摘要</div>
@@ -237,7 +237,7 @@ figcaption { font-size: 9pt; color: #666; margin-top: 5px; font-style: italic; }
 <tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code></td><td><strong>风险补偿</strong></td><td>低波动异象：偏好彩票型的投资者低估稳定股</td></tr>
 </tbody></table>
 <p><strong>分布缺陷（如实记录）</strong>：风险补偿 2 个、持续性 3 个、<strong>均值回复 0 个、可预测时钟 0 个</strong>——因子集合同质化。</p>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig13_correlation.png' style='width:77%'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig13_correlation.png' style='width:77%'><figcaption></figcaption></figure>
 <p><strong>PCA 方差解释</strong>（3 因子，全市场组）：39.4% / 32.7% / 27.9% —— 几乎均分，说明三个因子近似正交。</p>
 <h2>3.4 对照实验：A 股 60 日是反转不是动量</h2>
 <table>
@@ -267,7 +267,7 @@ p = 模型参数量
 <tr><td>随机森林（200 棵 d=5）</td><td>~6,400</td><td>320,000</td><td>❌</td><td>❌</td></tr>
 <tr><td>Transformer（1 层 d=64）</td><td>~5,000</td><td>250,000</td><td>❌ 差 3,900 倍</td><td>❌</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig7_complexity.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig7_complexity.png'><figcaption></figcaption></figure>
 <h2>4.2 非线性需不需要</h2>
 <p>先看三条定性证据，再过一道定量硬门槛。</p>
 <table>
@@ -352,7 +352,7 @@ p = 模型参数量
 <tr><td><strong>shared-driver</strong></td><td>同期内打乱未来收益作伪标签</td><td>IC ≈ 0</td><td>仍显著 → 有共同驱动</td></tr>
 <tr><td><strong>regime 分区</strong></td><td>按 5 个市场时段分别算 IC</td><td>符号稳定</td><td>某区翻转且显著</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig6_mechanism_matrix.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig6_mechanism_matrix.png'><figcaption></figcaption></figure>
 <p><strong>最有价值的发现——一条完整的因果链。</strong> <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code> 的 timing placebo：</p>
 <pre>k0 (当期)  +0.0449
 k1         +0.0227
@@ -408,7 +408,7 @@ k4         +0.0525
 <tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code></td><td>—</td><td><strong>−0.102%</strong></td><td>&gt;100%</td><td>❌</td></tr>
 <tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></td><td>+1.216%</td><td><strong>−0.058%</strong></td><td>105%</td><td>❌</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig10_long_short_split.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig10_long_short_split.png'><figcaption></figcaption></figure>
 <pre>dgm_q 的账：
   多空价差 +1.421% 看起来健康
   但多头超额只有 +0.136%，空头贡献 +1.284%（占 90%）
@@ -508,7 +508,7 @@ k4         +0.0525
 <tr><td>换手（年）</td><td>2.10 倍</td><td>1.98 倍</td></tr>
 <tr><td>持仓数</td><td>723 只（top-30%）</td><td>723 只</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig3_nav.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig3_nav.png'><figcaption></figcaption></figure>
 <p><strong>分年度：衰减清晰可见</strong></p>
 <table>
 <colgroup><col style='width:14.7%'><col style='width:17.6%'><col style='width:17.6%'><col style='width:14.7%'><col style='width:17.6%'><col style='width:17.6%'></colgroup>
@@ -521,10 +521,10 @@ k4         +0.0525
 <tr><td>2016</td><td>+0.7%</td><td>+0.0%</td><td>2023</td><td>+0.1%</td><td>−1.2%</td></tr>
 <tr><td>2017</td><td>+1.2%</td><td>+1.2%</td><td>2024</td><td>−0.0%</td><td>−0.6%</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig1_ic_decay.png'><figcaption></figcaption></figure>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig14_drawdown.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig1_ic_decay.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig14_drawdown.png'><figcaption></figcaption></figure>
 <h2>5.5 E5 成本评估：E4 低估了 2.1 倍</h2>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig8_cost_breakdown.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig8_cost_breakdown.png'><figcaption></figcaption></figure>
 <table>
 <colgroup><col style='width:17.8%'><col style='width:50.7%'><col style='width:31.5%'></colgroup>
 <thead><tr><th>层</th><th>内容</th><th>我们的值</th></tr></thead><tbody>
@@ -572,7 +572,7 @@ k4         +0.0525
 <tr><td>最大可承受（保守）</td><td>3.05 倍 → 余量 <strong>1.45×</strong></td></tr>
 <tr><td>最小所需 edge / 实际</td><td>0.35 / <strong>0.87 bp/天</strong>（2.50×）</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig9_capacity.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig9_capacity.png'><figcaption></figcaption></figure>
 <blockquote>手册的 A 股约定被完全证实：「小盘股多头端的价差常在 100–500bp，容量往往比成本更早成为约束。」成本侧 break-even 2.36× 过关；容量侧 234% 不过关。</blockquote>
 <p><strong>alpha-to-go</strong>：信号半衰期 ≈ 63 交易日（1 季度），建仓 5 天 → 比值 7.9%，<strong>alpha 保留 96%</strong>。这是低频因子的核心优势。</p>
 <h2>5.7 E7 统计推断：门禁在这里拦下</h2>
@@ -585,8 +585,8 @@ k4         +0.0525
 <tr><td>SE</td><td>0.273</td><td>0.259</td></tr>
 <tr><td><strong>95% CI</strong></td><td>[+0.193, +1.262]</td><td><strong>[+0.028, +1.045]</strong></td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig12_sharpe_ci.png'><figcaption></figcaption></figure>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig4_dsr.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig12_sharpe_ci.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig4_dsr.png'><figcaption></figcaption></figure>
 <table>
 <colgroup><col style='width:20.5%'><col style='width:17.9%'><col style='width:19.2%'><col style='width:21.8%'><col style='width:20.5%'></colgroup>
 <thead><tr><th>组</th><th>口径</th><th>Sharpe</th><th>E[max\|N=15]</th><th><strong>DSR</strong></th></tr></thead><tbody>
@@ -612,7 +612,7 @@ k4         +0.0525
 <tr><td>2 因子</td><td>0.92%</td><td><strong>1.28%</strong></td><td>−53.7%</td><td>8 期（约 2 年）</td></tr>
 <tr><td>3 因子</td><td>2.54%</td><td>2.93%</td><td>−52.0%</td><td>5 期</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures/fig5_stress.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures/fig5_stress.png'><figcaption></figcaption></figure>
 <p><strong>泄漏五查（全过）</strong>：</p>
 <table>
 <colgroup><col style='width:10.3%'><col style='width:29.4%'><col style='width:60.3%'></colgroup>

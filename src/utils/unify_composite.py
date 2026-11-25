@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 """统一合成口径：等权 vs IC 加权并列对比，最终采用等权并同步 F7/F8 文档"""
+import os
 import json, time
 from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path(r"D:\HuaweiMoveData\Users\战昶旭\Desktop\Test")
+# 数据根目录。默认取本仓库上两级（src/<stage>/x.py → 仓库根）。
+# 本地复现时把 FACTOR_STUDY_ROOT 指向你放 CLEAN/ 与 data/ 的目录。
+ROOT = Path(os.environ.get("FACTOR_STUDY_ROOT", Path(__file__).resolve().parents[2]))
 CLEAN = ROOT / "CLEAN"
 S = ROOT / "SCRIPT"
 H = 60

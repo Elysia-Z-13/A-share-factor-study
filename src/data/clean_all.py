@@ -24,7 +24,9 @@ import numpy as np
 import pandas as pd
 
 # ─────────────────────────── 配置 ───────────────────────────
-ROOT = Path(r"D:\HuaweiMoveData\Users\战昶旭\Desktop\Test")
+# 数据根目录。默认取本仓库上两级（src/<stage>/x.py → 仓库根）。
+# 本地复现时把 FACTOR_STUDY_ROOT 指向你放 CLEAN/ 与 data/ 的目录。
+ROOT = Path(os.environ.get("FACTOR_STUDY_ROOT", Path(__file__).resolve().parents[2]))
 RAW  = ROOT / "DATA"
 OUT  = ROOT / "CLEAN"
 for sub in ["quotes", "fin", "meta"]:

@@ -174,6 +174,12 @@ a-share-factor-study/
 pip install -r requirements.txt
 ```
 
+> **Path configuration**: the scripts resolve the data root from the
+> `FACTOR_STUDY_ROOT` environment variable, defaulting to the repository root.
+> Set it to the directory that holds your `CLEAN/` and `data/` folders, e.g.
+> `$env:FACTOR_STUDY_ROOT = "D:\my-data\factor-study"` (PowerShell) or
+> `export FACTOR_STUDY_ROOT=/my-data/factor-study` (bash).
+
 **Data required** (export from CSMAR yourself; not committed):
 
 | Data | File | Key fields |

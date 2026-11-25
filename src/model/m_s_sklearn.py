@@ -2,6 +2,7 @@
 """M-S 复验：用 sklearn 重跑 等权 / Ridge / LASSO / GBDT / RF 对比
 并加入 PCA 风险分解（BBP 阈值判断真实成分数）
 """
+import os
 import sys, time, json
 from pathlib import Path
 import numpy as np
@@ -15,7 +16,9 @@ from sklearn.ensemble import HistGradientBoostingRegressor, RandomForestRegresso
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
-ROOT = Path(r"D:\HuaweiMoveData\Users\战昶旭\Desktop\Test")
+# 数据根目录。默认取本仓库上两级（src/<stage>/x.py → 仓库根）。
+# 本地复现时把 FACTOR_STUDY_ROOT 指向你放 CLEAN/ 与 data/ 的目录。
+ROOT = Path(os.environ.get("FACTOR_STUDY_ROOT", Path(__file__).resolve().parents[2]))
 CLEAN = ROOT / "CLEAN"
 SEED = 42
 

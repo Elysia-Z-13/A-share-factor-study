@@ -85,7 +85,7 @@ figcaption { font-size: 9pt; color: #666; margin-top: 5px; font-style: italic; }
 <tr><td><strong>Capacity</strong></td><td><strong>RMB 43M</strong> (RMB 100M AUM exceeds by 234%)</td><td>❌</td></tr>
 </tbody></table>
 <p style='text-align:center'><strong>Pipeline progress: 33/41, halted at gate G5.4 (DSR &gt; 0.95) in stage E7</strong></p>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig11_pipeline.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig11_pipeline.png'><figcaption></figcaption></figure>
 <div class='pb'></div>
 <div class='toc'><h1>Contents</h1>
 <div class='l1'>Abstract</div>
@@ -235,7 +235,7 @@ Q3 report      (Sep 30)   → Oct 31 of the same year</pre>
 <tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm_vol</code></td><td><strong>Risk premium</strong></td><td>Low-volatility anomaly: lottery-preferring investors underprice stable stocks</td></tr>
 </tbody></table>
 <p><strong>Distribution weakness (disclosed)</strong>: 2 risk-premium, 3 persistence, <strong>0 mean-reversion, 0 predictable-clock</strong> — the factor set is homogeneous.</p>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig13_correlation.png' style='width:77%'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig13_correlation.png' style='width:77%'><figcaption></figcaption></figure>
 <p><strong>PCA variance explained</strong> (3 factors, full-market group): 39.4% / 32.7% / 27.9% — nearly equal, indicating near-orthogonality.</p>
 <h2>3.4 Control experiment: A-share 60-day is reversal, not momentum</h2>
 <table>
@@ -265,7 +265,7 @@ Our n: independent reporting periods = 64   (NOT 179,750 rows)
 <tr><td>Random forest (200 trees, d=5)</td><td>~6,400</td><td>320,000</td><td>❌</td><td>❌</td></tr>
 <tr><td>Transformer (1 layer, d=64)</td><td>~5,000</td><td>250,000</td><td>❌ short by 3,900×</td><td>❌</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig7_complexity.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig7_complexity.png'><figcaption></figcaption></figure>
 <h2>4.2 Is non-linearity needed?</h2>
 <table>
 <colgroup><col style='width:25.3%'><col style='width:40.5%'><col style='width:34.2%'></colgroup>
@@ -344,7 +344,7 @@ For any monotonically increasing g:  rank(g(s)) = rank(s)
 <tr><td><strong>shared-driver</strong></td><td>Shuffle forward returns within period as pseudo-label</td><td>IC ≈ 0</td><td>Still significant → common driver</td></tr>
 <tr><td><strong>regime split</strong></td><td>Recompute IC per market regime</td><td>Sign stable</td><td>Sign flips in one regime and is significant</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig6_mechanism_matrix.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig6_mechanism_matrix.png'><figcaption></figcaption></figure>
 <p><strong>The most valuable finding — a complete causal chain.</strong> <code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code> timing placebo:</p>
 <pre>k0 (contemporaneous)  +0.0449
 k1                    +0.0227
@@ -398,7 +398,7 @@ k0 -0.0310  k1 -0.0302  k2 -0.0296  k3 -0.0310  k4 -0.0258
 <tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>transfer_intensity</code></td><td>—</td><td><strong>−0.102%</strong></td><td>&gt;100%</td><td>❌</td></tr>
 <tr><td><code style='background:#eef2f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:9pt'>gm</code></td><td>+1.216%</td><td><strong>−0.058%</strong></td><td>105%</td><td>❌</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig10_long_short_split.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig10_long_short_split.png'><figcaption></figcaption></figure>
 <pre>The arithmetic for dgm_q:
   Long-short spread +1.421% looks healthy
   but long excess is only +0.136%; short contributes +1.284% (90%)
@@ -492,7 +492,7 @@ Without this adjustment you compute a false &quot;paired t = 6.16, highly signif
 <tr><td>Turnover (annual)</td><td>2.10×</td><td>1.98×</td></tr>
 <tr><td>Holdings</td><td>723 (top-30%)</td><td>723</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig3_nav.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig3_nav.png'><figcaption></figcaption></figure>
 <table>
 <colgroup><col style='width:14.7%'><col style='width:17.6%'><col style='width:17.6%'><col style='width:14.7%'><col style='width:17.6%'><col style='width:17.6%'></colgroup>
 <thead><tr><th>Year</th><th>2 factors</th><th>3 factors</th><th>Year</th><th>2 factors</th><th>3 factors</th></tr></thead><tbody>
@@ -504,10 +504,10 @@ Without this adjustment you compute a false &quot;paired t = 6.16, highly signif
 <tr><td>2016</td><td>+0.7%</td><td>+0.0%</td><td>2023</td><td>+0.1%</td><td>−1.2%</td></tr>
 <tr><td>2017</td><td>+1.2%</td><td>+1.2%</td><td>2024</td><td>−0.0%</td><td>−0.6%</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig1_ic_decay.png'><figcaption></figcaption></figure>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig14_drawdown.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig1_ic_decay.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig14_drawdown.png'><figcaption></figcaption></figure>
 <h2>5.5 E5 Cost evaluation: E4 understated by 2.1×</h2>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig8_cost_breakdown.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig8_cost_breakdown.png'><figcaption></figcaption></figure>
 <table>
 <colgroup><col style='width:17.8%'><col style='width:50.7%'><col style='width:31.5%'></colgroup>
 <thead><tr><th>Layer</th><th>Content</th><th>Our value</th></tr></thead><tbody>
@@ -553,7 +553,7 @@ Without this adjustment you compute a false &quot;paired t = 6.16, highly signif
 <tr><td>Max sustainable (conservative)</td><td>3.05× → margin <strong>1.45×</strong></td></tr>
 <tr><td>Min required edge / actual</td><td>0.35 / <strong>0.87 bp/day</strong> (2.50×)</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig9_capacity.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig9_capacity.png'><figcaption></figcaption></figure>
 <blockquote>The manual&#x27;s A-share convention is fully confirmed: &#x27;small-cap long-side spreads are often 100-500bp; capacity typically binds before cost does.&#x27; Cost side: break-even 2.36× — passes. Capacity side: 234% — fails.</blockquote>
 <p><strong>alpha-to-go</strong>: signal half-life ≈ 63 trading days (one quarter), build time 5 days → ratio 7.9%, <strong>alpha retained 96%</strong>. This is the core advantage of low-frequency factors.</p>
 <h2>5.7 E7 Statistical inference: the gate stops here</h2>
@@ -566,8 +566,8 @@ Without this adjustment you compute a false &quot;paired t = 6.16, highly signif
 <tr><td>SE</td><td>0.273</td><td>0.259</td></tr>
 <tr><td><strong>95% CI</strong></td><td>[+0.193, +1.262]</td><td><strong>[+0.028, +1.045]</strong></td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig12_sharpe_ci.png'><figcaption></figcaption></figure>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig4_dsr.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig12_sharpe_ci.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig4_dsr.png'><figcaption></figcaption></figure>
 <table>
 <colgroup><col style='width:20.5%'><col style='width:17.9%'><col style='width:19.2%'><col style='width:21.8%'><col style='width:20.5%'></colgroup>
 <thead><tr><th>Group</th><th>Convention</th><th>Sharpe</th><th>E[max\|N=15]</th><th><strong>DSR</strong></th></tr></thead><tbody>
@@ -593,7 +593,7 @@ There is no fourth route.</pre>
 <tr><td>2 factors</td><td>0.92%</td><td><strong>1.28%</strong></td><td>−53.7%</td><td>8 periods (~2 years)</td></tr>
 <tr><td>3 factors</td><td>2.54%</td><td>2.93%</td><td>−52.0%</td><td>5 periods</td></tr>
 </tbody></table>
-<figure><img src='file:///D:/HuaweiMoveData/Users/战昶旭/Desktop/Test/a-share-factor-study/results/figures_en/fig5_stress.png'><figcaption></figcaption></figure>
+<figure><img src='../results/figures_en/fig5_stress.png'><figcaption></figcaption></figure>
 <table>
 <colgroup><col style='width:10.3%'><col style='width:29.4%'><col style='width:60.3%'></colgroup>
 <thead><tr><th>#</th><th>Location</th><th>Result</th></tr></thead><tbody>

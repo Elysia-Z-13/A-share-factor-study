@@ -6,12 +6,15 @@ D3 universe 与 mask：执行版（按《D3universe与mask流程手册》附录 
   universe_rule.md            规则文档
   CLEAN/meta/universe_flags.csv  (code,date,universe_ok,tradable)
 """
+import os
 import json, time
 from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path(r"D:\HuaweiMoveData\Users\战昶旭\Desktop\Test")
+# 数据根目录。默认取本仓库上两级（src/<stage>/x.py → 仓库根）。
+# 本地复现时把 FACTOR_STUDY_ROOT 指向你放 CLEAN/ 与 data/ 的目录。
+ROOT = Path(os.environ.get("FACTOR_STUDY_ROOT", Path(__file__).resolve().parents[2]))
 CLEAN = ROOT / "CLEAN"
 DATA = ROOT / "data"
 t0 = time.time()
